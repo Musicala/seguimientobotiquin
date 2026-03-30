@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 | Botiquines SG-SST</title>
+  <meta
+    name="description"
+    content="La ruta solicitada no fue encontrada en el sistema de gestión de botiquines."
+  />
+
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --border: #dbe3ee;
+      --text: #172033;
+      --text-soft: #5b6780;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --danger: #dc2626;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, #f3f6fb 100%);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: var(--max-width);
+    }
+
+    .error-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 520px;
+      position: relative;
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.08), transparent 35%),
+        var(--surface);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+
+    .code-404 {
+      font-size: clamp(4rem, 10vw, 7rem);
+      line-height: 0.95;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin: 0 0 18px;
+      color: var(--text);
+    }
+
+    .title {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      line-height: 1.05;
+      margin: 0 0 14px;
+      font-weight: 800;
+      max-width: 12ch;
+    }
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-soft);
+      max-width: 62ch;
+      margin: 0 0 28px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button--primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.24);
+    }
+
+    .button--secondary {
+      background: var(--surface-soft);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .info-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-height: 520px;
+      justify-content: center;
+    }
+
+    .mini-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface-soft);
+      padding: 18px 18px 16px;
+    }
+
+    .mini-panel h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .mini-panel p,
+    .mini-panel li {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.65;
+      font-size: 0.96rem;
+    }
+
+    .mini-panel ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .path-box {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px dashed var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92rem;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 920px) {
+      .error-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card,
+      .info-card {
+        min-height: auto;
+      }
+
+      .hero-card {
+        padding: 32px 24px;
+      }
+
+      .info-card {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 20px 14px;
+      }
+
+      .hero-card,
+      .info-card {
+        border-radius: 22px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-labelledby="error-title">
+    <div class="error-layout">
+      <section class="card hero-card">
+        <div class="eyebrow">Ruta no encontrada</div>
+
+        <p class="code-404" aria-hidden="true">404</p>
+
+        <h1 id="error-title" class="title">
+          Esta página no existe en el sistema
+        </h1>
+
+        <p class="description">
+          La ruta que intentaste abrir no fue encontrada. Puede que el enlace esté roto,
+          haya sido escrito mal o simplemente GitHub Pages decidió ponerse creativo.
+        </p>
+
+        <div class="actions">
+          <a href="./index.html" class="button button--primary">
+            Volver al inicio
+          </a>
+
+          <button type="button" class="button button--secondary" id="goBackBtn">
+            Volver atrás
+          </button>
+        </div>
+
+        <p class="footer-note">
+          Si esto pasó desde una navegación interna, conviene revisar el router o la URL.
+        </p>
+      </section>
+
+      <aside class="card info-card" aria-label="Información adicional">
+        <section class="mini-panel">
+          <h2>Ruta detectada</h2>
+          <p>Esto fue lo que el navegador intentó abrir:</p>
+          <div class="path-box" id="currentPath">Cargando ruta...</div>
+        </section>
+
+        <section class="mini-panel">
+          <h2>Qué revisar si están desarrollando</h2>
+          <ul>
+            <li>Que el enlace o botón apunte bien a la ruta esperada.</li>
+            <li>Que el archivo exista realmente en el deploy.</li>
+            <li>Que el router esté leyendo correctamente el hash.</li>
+            <li>Que no haya rutas absolutas mal construidas en GitHub Pages.</li>
+          </ul>
+        </section>
+
+        <section class="mini-panel">
+          <h2>Recomendación técnica</h2>
+          <p>
+            Si están usando navegación tipo <strong>#/dashboard</strong>,
+            esta página debería aparecer muy poco. Si aparece seguido, hay un problema
+            real en cómo están resolviendo enlaces o recargas.
+          </p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const pathBox = document.getElementById("currentPath");
+    const goBackBtn = document.getElementById("goBackBtn");
+
+    if (pathBox) {
+      pathBox.textContent = window.location.href;
+    }
+
+    if (goBackBtn) {
+      goBackBtn.addEventListener("click", () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "./index.html";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

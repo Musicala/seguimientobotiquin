@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Seguimiento de Botiquines | Musicala</title>
+  <meta
+    name="description"
+    content="Sistema de seguimiento e inspección de botiquines de Musicala para control interno, SGSST y auditorías."
+  />
+  <meta name="theme-color" content="#8c52ff" />
+
+  <link rel="icon" href="./assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="./assets/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="./css/layout.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/forms.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" aria-label="Menú lateral">
+      <div class="sidebar__top">
+        <a href="#dashboard" class="brand" aria-label="Ir al dashboard">
+          <div class="brand__logo-wrap">
+            <img
+              src="./assets/logo.png"
+              alt="Logo Musicala"
+              class="brand__logo"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+            />
+            <div class="brand__logo-fallback" style="display:none;">M</div>
+          </div>
+
+          <div class="brand__text">
+            <span class="brand__name">Musicala</span>
+            <span class="brand__subtitle">Seguimiento Botiquín</span>
+          </div>
+        </a>
+
+        <button
+          class="sidebar__toggle"
+          id="sidebarToggle"
+          type="button"
+          aria-label="Abrir o cerrar menú lateral"
+          aria-controls="sidebar"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- NAVEGACIÓN -->
+      <div class="sidebar__section">
+        <p class="sidebar__label">Navegación</p>
+
+        <nav class="nav" aria-label="Navegación principal">
+          <a href="#dashboard" class="nav__link is-active" data-route="dashboard">
+            <span class="nav__icon" aria-hidden="true">📊</span>
+            <span class="nav__text">Dashboard</span>
+          </a>
+
+          <a href="#botiquines" class="nav__link" data-route="botiquines">
+            <span class="nav__icon" aria-hidden="true">🩹</span>
+            <span class="nav__text">Botiquines</span>
+          </a>
+
+          <a href="#inventario" class="nav__link" data-route="inventario">
+            <span class="nav__icon" aria-hidden="true">📋</span>
+            <span class="nav__text">Inventario</span>
+          </a>
+
+          <a href="#inspecciones" class="nav__link" data-route="inspecciones">
+            <span class="nav__icon" aria-hidden="true">📝</span>
+            <span class="nav__text">Inspecciones</span>
+          </a>
+
+          <a href="#reposiciones" class="nav__link" data-route="reposiciones">
+            <span class="nav__icon" aria-hidden="true">📦</span>
+            <span class="nav__text">Reposiciones</span>
+          </a>
+
+          <a href="#alertas" class="nav__link" data-route="alertas">
+            <span class="nav__icon" aria-hidden="true">🚨</span>
+            <span class="nav__text">Alertas</span>
+          </a>
+
+          <a href="#pedido" class="nav__link" data-route="pedido">
+            <span class="nav__icon" aria-hidden="true">🛒</span>
+            <span class="nav__text">Pedido</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- ACCESOS RÁPIDOS -->
+      <div class="sidebar__section">
+        <div class="sidebar__section-head">
+          <p class="sidebar__label">Botiquines</p>
+          <span class="sidebar__hint">Accesos rápidos</span>
+        </div>
+
+        <div class="quick-botiquines" id="quickBotiquines">
+          <button class="quick-botiquines__item" type="button" data-botiquin="BOT-001">
+            <span class="quick-botiquines__title">Primer piso</span>
+            <span class="quick-botiquines__meta">Botiquín principal</span>
+          </button>
+
+          <button class="quick-botiquines__item" type="button" data-botiquin="BOT-002">
+            <span class="quick-botiquines__title">Segundo piso</span>
+            <span class="quick-botiquines__meta">Botiquín principal</span>
+          </button>
+
+          <button class="quick-botiquines__item" type="button" data-botiquin="BOT-003">
+            <span class="quick-botiquines__title">Oficina</span>
+            <span class="quick-botiquines__meta">Emergencia</span>
+          </button>
+
+          <button class="quick-botiquines__item" type="button" data-botiquin="BOT-004">
+            <span class="quick-botiquines__title">Recepción</span>
+            <span class="quick-botiquines__meta">Emergencia</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ACCESO ESPECIAL -->
+      <div class="sidebar__section">
+        <div class="sidebar__section-head">
+          <p class="sidebar__label">Gestión rápida</p>
+          <span class="sidebar__hint">Proveedor / compras</span>
+        </div>
+
+        <div class="quick-botiquines">
+          <a class="quick-botiquines__item" href="#pedido" data-route="pedido">
+            <span class="quick-botiquines__title">Pedido consolidado</span>
+            <span class="quick-botiquines__meta">Lista lista para imprimir</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="sidebar__footer">
+        <div class="sidebar__card">
+          <p class="sidebar__card-title">Control interno</p>
+          <p class="sidebar__card-text">
+            Seguimiento de inventario, revisiones, alertas, faltantes y reposiciones
+            para SGSST y control operativo.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- OVERLAY MÓVIL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button
+            class="topbar__menu-btn"
+            id="mobileMenuBtn"
+            type="button"
+            aria-label="Abrir menú"
+            aria-controls="sidebar"
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+
+          <div>
+            <p class="topbar__eyebrow">Sistema interno</p>
+            <h1 class="topbar__title" id="pageTitle">Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="topbar__right">
+          <div class="status-chip" id="connectionStatus" role="status" aria-live="polite">
+            <span class="status-chip__dot"></span>
+            <span class="status-chip__text">Conectando...</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content content--dashboard-shell">
+        <!-- CABECERA DEL SHELL -->
+        <section class="dashboard-shell-head" aria-label="Resumen general del sistema">
+          <div class="dashboard-shell-head__main">
+            <div class="dashboard-shell-head__copy">
+              <p class="dashboard-shell-head__eyebrow">Musicala · SGSST</p>
+              <h2 class="dashboard-shell-head__title">Seguimiento de botiquines</h2>
+              <p class="dashboard-shell-head__text">
+                Control centralizado de inventario, inspecciones, vencimientos,
+                faltantes y reposiciones para botiquines institucionales y de emergencia.
+              </p>
+            </div>
+
+            <div class="dashboard-shell-head__actions">
+              <button class="btn btn--primary" id="btnRefreshDashboard" type="button">
+                Actualizar datos
+              </button>
+
+              <a class="btn btn--ghost" href="#inspecciones" data-route="inspecciones">
+                Nueva inspección
+              </a>
+
+              <a class="btn btn--ghost" href="#pedido" data-route="pedido">
+                Ver pedido
+              </a>
+            </div>
+          </div>
+
+          <div class="dashboard-shell-head__note" aria-hidden="true">
+            <span class="dashboard-shell-head__note-dot"></span>
+            <span>Vista general del sistema</span>
+          </div>
+        </section>
+
+        <!-- KPIs -->
+        <section class="kpi-grid kpi-grid--shell" id="kpiGrid" aria-label="Indicadores principales">
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <p class="kpi-card__label">Botiquines activos</p>
+            </div>
+            <h3 class="kpi-card__value" id="kpiBotiquines">--</h3>
+            <p class="kpi-card__caption">Puntos monitoreados en la sede</p>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <p class="kpi-card__label">Elementos vencidos</p>
+            </div>
+            <h3 class="kpi-card__value is-danger" id="kpiVencidos">--</h3>
+            <p class="kpi-card__caption">Requieren atención inmediata</p>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <p class="kpi-card__label">Próximos a vencer</p>
+            </div>
+            <h3 class="kpi-card__value is-warning" id="kpiProximos">--</h3>
+            <p class="kpi-card__caption">Pendientes de revisión preventiva</p>
+          </article>
+
+          <article class="kpi-card">
+            <div class="kpi-card__top">
+              <p class="kpi-card__label">Bajo stock / faltantes</p>
+            </div>
+            <h3 class="kpi-card__value is-alert" id="kpiStock">--</h3>
+            <p class="kpi-card__caption">Ítems por reponer o completar</p>
+          </article>
+        </section>
+
+        <!-- VISTA DINÁMICA -->
+        <section class="view-panel view-panel--clean">
+          <div class="view-panel__header">
+            <div class="view-panel__header-main">
+              <div>
+                <p class="view-panel__eyebrow">Vista actual</p>
+                <h2 class="view-panel__title" id="viewTitle">Panel principal</h2>
+              </div>
+            </div>
+          </div>
+
+          <div id="viewContainer" class="view-container" aria-live="polite">
+            <div class="empty-state">
+              <div class="empty-state__icon">🩺</div>
+              <h3 class="empty-state__title">Cargando sistema</h3>
+              <p class="empty-state__text">
+                Estamos preparando la información del dashboard.
+                Porque hasta los botiquines terminaron necesitando su propio sistema.
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <div
+    class="toast-stack"
+    id="toastStack"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+  <!-- LOADER GLOBAL -->
+  <div class="global-loader is-hidden" id="globalLoader" aria-hidden="true">
+    <div class="global-loader__box">
+      <div class="global-loader__spinner"></div>
+      <p class="global-loader__text">Cargando información...</p>
+    </div>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
