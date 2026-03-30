@@ -1,0 +1,310 @@
+<section
+  id="inspecciones-view"
+  class="view view--inspecciones"
+  data-view="inspecciones"
+  aria-labelledby="inspecciones-title"
+>
+  <!-- HEADER PRINCIPAL -->
+  <header class="view-header" data-role="view-header">
+    <div class="view-header__main">
+      <p class="view-eyebrow">Seguimiento operativo</p>
+      <h1 id="inspecciones-title" class="view-title">Inspecciones</h1>
+      <p class="view-description">
+        Consulta, filtra y supervisa las inspecciones realizadas, pendientes o
+        programadas para los botiquines registrados en el sistema, junto con sus
+        hallazgos y necesidades de seguimiento.
+      </p>
+    </div>
+
+    <div
+      id="inspecciones-header-actions"
+      class="view-header__actions"
+      data-slot="header-actions"
+      aria-label="Acciones principales de inspecciones"
+    >
+      <!-- Botones rápidos renderizados por JS -->
+    </div>
+  </header>
+
+  <!-- TOOLBAR / FILTROS -->
+  <section
+    id="inspecciones-toolbar-section"
+    class="view-toolbar-section"
+    aria-label="Filtros y herramientas de inspecciones"
+  >
+    <div class="toolbar" data-role="toolbar">
+      <div class="toolbar__left">
+        <div
+          id="inspecciones-toolbar-slot"
+          class="view-toolbar"
+          data-role="toolbar-content"
+          data-slot="toolbar"
+        >
+          <!-- renderToolbar() / filtros / búsqueda -->
+        </div>
+      </div>
+
+      <div class="toolbar__right">
+        <div
+          id="inspecciones-toolbar-actions"
+          data-slot="toolbar-actions"
+          aria-label="Acciones secundarias de inspecciones"
+        >
+          <!-- Exportar / recargar / cambiar modo de vista -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN / KPIs -->
+  <section
+    id="inspecciones-summary-section"
+    class="view-section"
+    aria-labelledby="inspecciones-summary-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="inspecciones-summary-title" class="section-title">
+          Resumen de inspecciones
+        </h2>
+        <p class="section-description">
+          Vista rápida del estado general de cumplimiento, ejecución, hallazgos
+          detectados y seguimiento pendiente.
+        </p>
+      </div>
+
+      <div
+        id="inspecciones-summary-meta"
+        class="section-meta"
+        data-slot="summary-meta"
+        aria-live="polite"
+      >
+        <!-- Última actualización / periodo / contexto -->
+      </div>
+    </div>
+
+    <div
+      id="inspecciones-summary-slot"
+      class="dashboard-summary-grid"
+      data-slot="summary"
+      aria-live="polite"
+    >
+      <!-- KPIs / tarjetas resumen -->
+    </div>
+  </section>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="view-layout view-layout--with-aside">
+    <!-- COLUMNA PRINCIPAL -->
+    <main
+      id="inspecciones-main"
+      class="view-main"
+      data-role="main-content"
+      aria-label="Listado principal de inspecciones"
+    >
+      <!-- LISTADO DE INSPECCIONES -->
+      <section
+        id="inspecciones-list-section"
+        class="view-section"
+        aria-labelledby="inspecciones-list-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="inspecciones-list-title" class="section-title">
+              Registros de inspección
+            </h2>
+            <p class="section-description">
+              Revisa las inspecciones asociadas a cada botiquín, su fecha,
+              responsable, estado y nivel de seguimiento requerido.
+            </p>
+          </div>
+
+          <div
+            id="inspecciones-list-meta"
+            class="section-meta"
+            data-slot="list-meta"
+            aria-live="polite"
+          >
+            <!-- Conteo, filtros activos, última actualización -->
+          </div>
+        </div>
+
+        <div
+          id="inspecciones-feedback-slot"
+          class="view-feedback"
+          data-slot="feedback"
+          aria-live="polite"
+        >
+          <!-- Loading / empty / error -->
+        </div>
+
+        <div
+          id="inspecciones-active-filters"
+          class="active-filters"
+          data-slot="active-filters"
+          aria-live="polite"
+        >
+          <!-- Chips de filtros activos -->
+        </div>
+
+        <div
+          id="inspecciones-list-shell"
+          class="data-panel"
+          data-role="list-shell"
+        >
+          <div
+            id="inspecciones-list-slot"
+            class="view-content-stack"
+            data-slot="list"
+          >
+            <!-- Tabla, cards o listado dinámico -->
+          </div>
+        </div>
+      </section>
+
+      <!-- HALLAZGOS / SEGUIMIENTO -->
+      <section
+        id="inspecciones-followup-section"
+        class="view-section"
+        aria-labelledby="inspecciones-followup-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="inspecciones-followup-title" class="section-title">
+              Hallazgos y seguimiento
+            </h2>
+            <p class="section-description">
+              Espacio para visualizar pendientes derivados de inspecciones, como
+              faltantes, ajustes de inventario, observaciones críticas o acciones correctivas.
+            </p>
+          </div>
+
+          <div
+            id="inspecciones-followup-meta"
+            class="section-meta"
+            data-slot="followup-meta"
+            aria-live="polite"
+          >
+            <!-- Resumen contextual -->
+          </div>
+        </div>
+
+        <div
+          id="inspecciones-followup-slot"
+          class="view-content-stack"
+          data-slot="followup"
+        >
+          <!-- Bloque dinámico de hallazgos, pendientes o agrupaciones -->
+        </div>
+      </section>
+    </main>
+
+    <!-- PANEL LATERAL -->
+    <aside
+      id="inspecciones-aside"
+      class="view-aside"
+      data-role="side-panel"
+      aria-labelledby="inspecciones-aside-title"
+    >
+      <!-- DETALLE DE INSPECCIÓN -->
+      <section class="view-section">
+        <div class="section-heading">
+          <h2 id="inspecciones-aside-title" class="section-title">
+            Detalle de inspección
+          </h2>
+          <p class="section-description">
+            Aquí se muestra la información ampliada del registro seleccionado,
+            incluyendo fechas, responsable, observaciones y contexto operativo.
+          </p>
+        </div>
+
+        <div
+          id="inspecciones-aside-slot"
+          class="view-content-stack"
+          data-slot="aside"
+        >
+          <!-- Panel de detalle principal -->
+        </div>
+      </section>
+
+      <!-- DETALLE DE ÍTEMS INSPECCIONADOS -->
+      <section
+        class="view-section"
+        aria-labelledby="inspecciones-items-title"
+      >
+        <div class="section-heading">
+          <h2 id="inspecciones-items-title" class="section-title">
+            Ítems inspeccionados
+          </h2>
+          <p class="section-description">
+            Visualiza el detalle por elemento inspeccionado, cantidades encontradas,
+            estado reportado, acciones requeridas y observaciones específicas.
+          </p>
+        </div>
+
+        <div
+          id="inspecciones-items-slot"
+          class="view-content-stack"
+          data-slot="inspection-items"
+        >
+          <!-- Lista/detalle de ítems asociados a la inspección -->
+        </div>
+      </section>
+
+      <!-- ACCIONES CONTEXTUALES -->
+      <section
+        class="view-section"
+        aria-labelledby="inspecciones-actions-title"
+      >
+        <div class="section-heading">
+          <h2 id="inspecciones-actions-title" class="section-title">
+            Acciones relacionadas
+          </h2>
+          <p class="section-description">
+            Accesos rápidos para editar, registrar seguimiento, generar reposición
+            o marcar hallazgos como gestionados.
+          </p>
+        </div>
+
+        <div
+          id="inspecciones-context-actions"
+          class="view-content-stack"
+          data-slot="context-actions"
+        >
+          <!-- Botones / panel contextual -->
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ESTADOS GLOBALES -->
+  <section
+    id="inspecciones-states"
+    class="view-states"
+    aria-live="polite"
+  >
+    <div
+      id="inspecciones-loading"
+      class="view-state view-state--loading"
+      hidden
+    >
+      Cargando información de inspecciones...
+    </div>
+
+    <div
+      id="inspecciones-empty"
+      class="view-state view-state--empty"
+      hidden
+    >
+      No hay inspecciones registradas para mostrar con los filtros actuales.
+    </div>
+
+    <div
+      id="inspecciones-error"
+      class="view-state view-state--error"
+      hidden
+    >
+      Ocurrió un error al cargar la información de inspecciones.
+    </div>
+  </section>
+</section>

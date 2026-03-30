@@ -1,0 +1,311 @@
+<section
+  id="inventario-view"
+  class="view view--inventario"
+  data-view="inventario"
+  aria-labelledby="inventario-title"
+>
+  <!-- HEADER PRINCIPAL -->
+  <header class="view-header" data-role="view-header">
+    <div class="view-header__main">
+      <p class="view-eyebrow">Control de existencias</p>
+      <h1 id="inventario-title" class="view-title">Inventario</h1>
+      <p class="view-description">
+        Consulta, filtra y supervisa los elementos registrados en los botiquines,
+        incluyendo disponibilidad, vencimientos, stock mínimo y necesidades de reposición.
+      </p>
+    </div>
+
+    <div
+      id="inventario-header-actions"
+      class="view-header__actions"
+      data-slot="header-actions"
+      aria-label="Acciones principales de inventario"
+    >
+      <!-- Botones rápidos renderizados por JS -->
+    </div>
+  </header>
+
+  <!-- TOOLBAR / FILTROS -->
+  <section
+    id="inventario-toolbar-section"
+    class="view-toolbar-section"
+    aria-label="Filtros y herramientas de inventario"
+  >
+    <div class="toolbar" data-role="toolbar">
+      <div class="toolbar__left">
+        <div
+          id="inventario-toolbar-slot"
+          class="view-toolbar"
+          data-slot="toolbar"
+        >
+          <!-- renderToolbar() / filtros / búsqueda -->
+        </div>
+      </div>
+
+      <div class="toolbar__right">
+        <div
+          id="inventario-toolbar-actions"
+          data-slot="toolbar-actions"
+          aria-label="Acciones secundarias de inventario"
+        >
+          <!-- Exportar / recargar / alternar vista -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN / KPIS -->
+  <section
+    id="inventario-summary-section"
+    class="view-section"
+    aria-labelledby="inventario-summary-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="inventario-summary-title" class="section-title">
+          Resumen de inventario
+        </h2>
+        <p class="section-description">
+          Indicadores clave para revisar disponibilidad general, elementos críticos,
+          vencimientos y comportamiento operativo del inventario.
+        </p>
+      </div>
+
+      <div
+        id="inventario-summary-meta"
+        class="section-meta"
+        data-slot="summary-meta"
+        aria-live="polite"
+      >
+        <!-- Última actualización / contexto resumido -->
+      </div>
+    </div>
+
+    <div
+      id="inventario-summary-slot"
+      class="dashboard-summary-grid"
+      data-slot="summary"
+      aria-live="polite"
+    >
+      <!-- KPIs / tarjetas resumen -->
+    </div>
+  </section>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="view-layout view-layout--with-aside">
+    <!-- COLUMNA PRINCIPAL -->
+    <main
+      id="inventario-main"
+      class="view-main"
+      data-role="main-content"
+      aria-label="Listado principal de inventario"
+    >
+      <!-- LISTADO / TABLA -->
+      <section
+        id="inventario-list-section"
+        class="view-section"
+        aria-labelledby="inventario-list-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="inventario-list-title" class="section-title">
+              Elementos registrados
+            </h2>
+            <p class="section-description">
+              Explora el inventario por nombre, categoría, botiquín, estado, ubicación,
+              vencimiento o nivel de stock.
+            </p>
+          </div>
+
+          <div
+            id="inventario-list-meta"
+            class="section-meta"
+            data-slot="list-meta"
+            aria-live="polite"
+          >
+            <!-- Conteo, filtros activos, paginación, última sincronización -->
+          </div>
+        </div>
+
+        <div
+          id="inventario-feedback-slot"
+          class="view-feedback"
+          data-slot="feedback"
+          aria-live="polite"
+        >
+          <!-- Loading / empty / error -->
+        </div>
+
+        <div
+          id="inventario-active-filters"
+          class="active-filters"
+          data-slot="active-filters"
+          aria-live="polite"
+        >
+          <!-- Chips de filtros activos -->
+        </div>
+
+        <div
+          id="inventario-list-shell"
+          class="data-panel"
+          data-role="list-shell"
+        >
+          <div
+            id="inventario-list-slot"
+            class="view-content-stack"
+            data-slot="list"
+          >
+            <!-- Tabla, cards o listado dinámico -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN COMPLEMENTARIA -->
+      <section
+        id="inventario-secondary-section"
+        class="view-section"
+        aria-labelledby="inventario-secondary-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="inventario-secondary-title" class="section-title">
+              Seguimiento operativo
+            </h2>
+            <p class="section-description">
+              Espacio para visualizar movimientos relevantes, observaciones,
+              agrupaciones rápidas o bloques adicionales conectados al inventario.
+            </p>
+          </div>
+
+          <div
+            id="inventario-secondary-meta"
+            class="section-meta"
+            data-slot="secondary-meta"
+            aria-live="polite"
+          >
+            <!-- Resumen contextual opcional -->
+          </div>
+        </div>
+
+        <div
+          id="inventario-secondary-slot"
+          class="view-content-stack"
+          data-slot="secondary"
+        >
+          <!-- Bloque opcional: movimientos recientes, agrupados, alertas contextuales -->
+        </div>
+      </section>
+    </main>
+
+    <!-- PANEL LATERAL -->
+    <aside
+      id="inventario-aside"
+      class="view-aside"
+      data-role="side-panel"
+      aria-labelledby="inventario-aside-title"
+    >
+      <!-- DETALLE DEL ÍTEM -->
+      <section
+        class="view-section"
+        aria-labelledby="inventario-aside-title"
+      >
+        <div class="section-heading">
+          <h2 id="inventario-aside-title" class="section-title">
+            Detalle del elemento
+          </h2>
+          <p class="section-description">
+            Aquí se muestra la información ampliada del ítem seleccionado,
+            incluyendo su estado, ubicación, vencimiento, lote y observaciones.
+          </p>
+        </div>
+
+        <div
+          id="inventario-aside-slot"
+          class="view-content-stack"
+          data-slot="aside"
+        >
+          <!-- Ficha técnica / resumen principal -->
+        </div>
+      </section>
+
+      <!-- ACCIONES CONTEXTUALES -->
+      <section
+        class="view-section"
+        aria-labelledby="inventario-actions-title"
+      >
+        <div class="section-heading">
+          <h2 id="inventario-actions-title" class="section-title">
+            Acciones del elemento
+          </h2>
+          <p class="section-description">
+            Accesos directos para editar, registrar reposición, revisar historial
+            o ejecutar acciones relacionadas con el ítem seleccionado.
+          </p>
+        </div>
+
+        <div
+          id="inventario-context-actions"
+          class="view-content-stack"
+          data-slot="context-actions"
+        >
+          <!-- Botones o panel de acciones -->
+        </div>
+      </section>
+
+      <!-- ALERTAS CONTEXTUALES -->
+      <section
+        class="view-section"
+        aria-labelledby="inventario-context-alerts-title"
+      >
+        <div class="section-heading">
+          <h2 id="inventario-context-alerts-title" class="section-title">
+            Alertas del elemento
+          </h2>
+          <p class="section-description">
+            Visualiza hallazgos relevantes asociados al ítem, como bajo stock,
+            vencimiento próximo o inconsistencias detectadas.
+          </p>
+        </div>
+
+        <div
+          id="inventario-context-alerts"
+          class="view-content-stack"
+          data-slot="context-alerts"
+        >
+          <!-- Alertas contextuales -->
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ESTADOS GLOBALES DE LA VISTA -->
+  <section
+    id="inventario-states"
+    class="view-states"
+    aria-live="polite"
+  >
+    <div
+      id="inventario-loading"
+      class="view-state view-state--loading"
+      hidden
+    >
+      Cargando información del inventario...
+    </div>
+
+    <div
+      id="inventario-empty"
+      class="view-state view-state--empty"
+      hidden
+    >
+      No hay elementos registrados para mostrar con los filtros actuales.
+    </div>
+
+    <div
+      id="inventario-error"
+      class="view-state view-state--error"
+      hidden
+    >
+      Ocurrió un error al cargar la información del inventario.
+    </div>
+  </section>
+</section>

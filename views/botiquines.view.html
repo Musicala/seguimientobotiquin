@@ -1,0 +1,255 @@
+import { getState } from "../state.js";
+import {
+  createEmptyState,
+  createLoadingState,
+  createErrorState
+} from "../ui/components.js";
+
+let root = null;
+
+export function initBotiquinesModule(viewRoot) {
+  root = viewRoot;
+  bindBotiquinesEvents();
+  syncBotiquinesData();
+}
+
+export async function syncBotiquinesData() {
+  renderBotiquinesLoading();
+
+  try {
+    // const response = await fetchBotiquines();
+    // updateState('botiquines.items', response.items);
+
+    const state = getState();
+    const botiquines = state.botiquines?.items || [];
+    const selectedId = state.botiquines?.selectedId || null;
+
+    renderBotiquinesView(botiquines, selectedId);
+  } catch (error) {
+    renderBotiquinesError(error);
+  }
+}
+
+export function renderBotiquinesView(botiquines = [], selectedId = null) {
+  if (!root) return;
+
+  const $toolbar = root.querySelector('#botiquines-toolbar-slot');
+  const $summary = root.querySelector('#botiquines-summary-slot');
+  const $feedback = root.querySelector('#botiquines-feedback-slot');
+  const $list = root.querySelector('#botiquines-list-slot');
+  const $meta = root.querySelector('#botiquines-list-meta');
+  const $aside = root.querySelector('#botiquines-aside-slot');
+
+  $feedback.innerHTML = '';
+  $toolbar.innerHTML = renderBotiquinesToolbar();
+  $summary.innerHTML = renderBotiquinesSummary(botiquines);
+  $meta.textContent = `${botiquines.length} botiquín(es)`;
+
+  if (!botiquines.length) {
+    $list.innerHTML = '';
+    $aside.innerHTML = renderBotiquinAsideEmpty();
+    $feedback.innerHTML = createEmptyState({
+      title: 'No hay botiquines registrados',
+      description: 'Cuando existan botiquines en el sistema aparecerán aquí.'
+    });
+    return;
+  }
+
+  const selected =
+    botiquines.find((item) => item.id === selectedId) || botiquines[0];
+
+  $list.innerHTML = renderBotiquinesTable(botiquines, selected?.id);
+  $aside.innerHTML = renderBotiquinDetail(selected);
+}
+
+function renderBotiquinesLoading() {
+  if (!root) return;
+
+  const $feedback = root.querySelector('#botiquines-feedback-slot');
+  const $list = root.querySelector('#botiquines-list-slot');
+  const $aside = root.querySelector('#botiquines-aside-slot');
+
+  $list.innerHTML = '';
+  $aside.innerHTML = '';
+  $feedback.innerHTML = createLoadingState({
+    title: 'Cargando botiquines',
+    description: 'Consultando registros y estado operativo.'
+  });
+}
+
+function renderBotiquinesError(error) {
+  if (!root) return;
+
+  const $feedback = root.querySelector('#botiquines-feedback-slot');
+  const $list = root.querySelector('#botiquines-list-slot');
+  const $aside = root.querySelector('#botiquines-aside-slot');
+
+  $list.innerHTML = '';
+  $aside.innerHTML = '';
+  $feedback.innerHTML = createErrorState({
+    title: 'No fue posible cargar los botiquines',
+    description: error?.message || 'Ocurrió un error inesperado.'
+  });
+}
+
+function renderBotiquinesToolbar() {
+  return `
+    <div class="toolbar-group">
+      <label class="field">
+        <span class="field__label">Buscar</span>
+        <input
+          type="search"
+          class="input"
+          placeholder="Buscar por nombre, sede o ubicación"
+          data-action="search-botiquines"
+        />
+      </label>
+    </div>
+
+    <div class="toolbar-group toolbar-group--compact">
+      <label class="field">
+        <span class="field__label">Estado</span>
+        <select class="select" data-action="filter-status">
+          <option value="">Todos</option>
+          <option value="activo">Activos</option>
+          <option value="pendiente">Pendientes</option>
+          <option value="revision">En revisión</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">Tipo</span>
+        <select class="select" data-action="filter-type">
+          <option value="">Todos</option>
+          <option value="principal">Principal</option>
+          <option value="emergencia">Emergencia</option>
+        </select>
+      </label>
+    </div>
+  `;
+}
+
+function renderBotiquinesSummary(items) {
+  const total = items.length;
+  const activos = items.filter((item) => item.estado === 'activo').length;
+  const pendientes = items.filter((item) => item.estado === 'pendiente').length;
+
+  return `
+    <article class="metric-card">
+      <p class="metric-card__label">Total</p>
+      <strong class="metric-card__value">${total}</strong>
+    </article>
+    <article class="metric-card">
+      <p class="metric-card__label">Activos</p>
+      <strong class="metric-card__value">${activos}</strong>
+    </article>
+    <article class="metric-card">
+      <p class="metric-card__label">Pendientes</p>
+      <strong class="metric-card__value">${pendientes}</strong>
+    </article>
+  `;
+}
+
+function renderBotiquinesTable(items, selectedId) {
+  return `
+    <div class="table-card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Ubicación</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map((item) => `
+              <tr
+                data-action="select-botiquin"
+                data-id="${item.id}"
+                ${item.id === selectedId ? 'aria-current="true"' : ''}
+              >
+                <td>${item.nombre || '-'}</td>
+                <td>${item.ubicacion || '-'}</td>
+                <td>${item.tipo || '-'}</td>
+                <td>${item.estado || '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderBotiquinDetail(item) {
+  if (!item) return renderBotiquinAsideEmpty();
+
+  return `
+    <article class="panel-card">
+      <h3 class="panel-card__title">${item.nombre || 'Botiquín sin nombre'}</h3>
+      <dl class="detail-list">
+        <div class="detail-list__row">
+          <dt>Ubicación</dt>
+          <dd>${item.ubicacion || '-'}</dd>
+        </div>
+        <div class="detail-list__row">
+          <dt>Tipo</dt>
+          <dd>${item.tipo || '-'}</dd>
+        </div>
+        <div class="detail-list__row">
+          <dt>Estado</dt>
+          <dd>${item.estado || '-'}</dd>
+        </div>
+        <div class="detail-list__row">
+          <dt>Responsable</dt>
+          <dd>${item.responsable || '-'}</dd>
+        </div>
+      </dl>
+    </article>
+  `;
+}
+
+function renderBotiquinAsideEmpty() {
+  return `
+    <article class="panel-card panel-card--muted">
+      <h3 class="panel-card__title">Sin selección</h3>
+      <p class="panel-card__text">
+        Selecciona un botiquín del listado para ver su detalle.
+      </p>
+    </article>
+  `;
+}
+
+function bindBotiquinesEvents() {
+  if (!root || root.dataset.eventsBound === 'true') return;
+
+  root.addEventListener('click', onBotiquinesClick);
+  root.addEventListener('change', onBotiquinesFilter);
+  root.addEventListener('input', onBotiquinesFilter);
+
+  root.dataset.eventsBound = 'true';
+}
+
+function onBotiquinesClick(event) {
+  const row = event.target.closest('[data-action="select-botiquin"]');
+  if (!row) return;
+
+  const id = row.dataset.id;
+  // updateState('botiquines.selectedId', id);
+  // renderBotiquinesView(...)
+}
+
+function onBotiquinesFilter(event) {
+  const action = event.target?.dataset?.action;
+  if (!action) return;
+
+  switch (action) {
+    case 'search-botiquines':
+    case 'filter-status':
+    case 'filter-type':
+      // actualizar filtros en state y rerender
+      break;
+  }
+}

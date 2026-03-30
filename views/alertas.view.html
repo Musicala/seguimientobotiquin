@@ -1,0 +1,334 @@
+<section
+  id="alertas-view"
+  class="view view--alertas"
+  data-view="alertas"
+  aria-labelledby="alertas-title"
+>
+  <!-- HEADER PRINCIPAL -->
+  <header class="view-header" data-role="view-header">
+    <div class="view-header__main">
+      <p class="view-eyebrow">Seguimiento y control</p>
+      <h1 id="alertas-title" class="view-title">Alertas</h1>
+      <p class="view-description">
+        Supervisa vencimientos, faltantes críticos, inspecciones pendientes y
+        otras novedades que requieren atención dentro del sistema de botiquines,
+        con enfoque en prioridad, seguimiento y acciones correctivas.
+      </p>
+    </div>
+
+    <div
+      id="alertas-header-actions"
+      class="view-header__actions"
+      data-slot="header-actions"
+      aria-label="Acciones principales de alertas"
+    >
+      <!-- Acciones rápidas inyectadas por JS -->
+    </div>
+  </header>
+
+  <!-- TOOLBAR / FILTROS -->
+  <section
+    id="alertas-toolbar-section"
+    class="view-toolbar-section"
+    aria-label="Filtros y herramientas de alertas"
+  >
+    <div class="toolbar" data-role="toolbar">
+      <div class="toolbar__left">
+        <div
+          id="alertas-toolbar-slot"
+          class="view-toolbar"
+          data-role="toolbar-content"
+          data-slot="toolbar"
+        >
+          <!-- renderToolbar() / filtros / búsqueda -->
+        </div>
+      </div>
+
+      <div class="toolbar__right">
+        <div
+          id="alertas-toolbar-actions"
+          data-slot="toolbar-actions"
+          aria-label="Acciones secundarias de alertas"
+        >
+          <!-- Exportar / recargar / alternar agrupación -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN / KPIs -->
+  <section
+    id="alertas-summary-section"
+    class="view-section"
+    aria-labelledby="alertas-summary-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="alertas-summary-title" class="section-title">
+          Resumen de alertas
+        </h2>
+        <p class="section-description">
+          Estado general del sistema según prioridad, tipo de alerta, nivel de
+          atención requerida y volumen de pendientes activos.
+        </p>
+      </div>
+
+      <div
+        id="alertas-summary-meta"
+        class="section-meta"
+        data-slot="summary-meta"
+        aria-live="polite"
+      >
+        <!-- Última actualización / contexto general -->
+      </div>
+    </div>
+
+    <div
+      id="alertas-summary-slot"
+      class="dashboard-summary-grid"
+      data-slot="summary"
+      aria-live="polite"
+    >
+      <!-- Cards de resumen, KPIs o estados -->
+    </div>
+  </section>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="view-layout view-layout--with-aside">
+    <!-- COLUMNA PRINCIPAL -->
+    <main
+      id="alertas-main"
+      class="view-main"
+      data-role="main-content"
+      aria-label="Contenido principal de alertas"
+    >
+      <!-- LISTADO CONSOLIDADO -->
+      <section
+        id="alertas-list-section"
+        class="view-section"
+        aria-labelledby="alertas-list-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="alertas-list-title" class="section-title">
+              Alertas registradas
+            </h2>
+            <p class="section-description">
+              Listado consolidado con alertas activas, próximas, atendidas o
+              resueltas, agrupadas por tipo, prioridad, origen o estado.
+            </p>
+          </div>
+
+          <div
+            id="alertas-list-meta"
+            class="section-meta"
+            data-slot="list-meta"
+            aria-live="polite"
+          >
+            <!-- Conteo, filtros activos, fecha de actualización -->
+          </div>
+        </div>
+
+        <div
+          id="alertas-feedback-slot"
+          class="view-feedback"
+          data-slot="feedback"
+          aria-live="polite"
+        >
+          <!-- Loading / empty / error -->
+        </div>
+
+        <div
+          id="alertas-active-filters"
+          class="active-filters"
+          data-slot="active-filters"
+          aria-live="polite"
+        >
+          <!-- Chips de filtros activos -->
+        </div>
+
+        <div
+          id="alertas-list-shell"
+          class="data-panel"
+          data-role="list-shell"
+        >
+          <div
+            id="alertas-list-slot"
+            class="view-content-stack"
+            data-slot="list"
+          >
+            <!-- Tabla, cards o lista de alertas renderizada por JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- AGRUPACIÓN / PRIORIZACIÓN -->
+      <section
+        id="alertas-priority-section"
+        class="view-section"
+        aria-labelledby="alertas-priority-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="alertas-priority-title" class="section-title">
+              Priorización y seguimiento
+            </h2>
+            <p class="section-description">
+              Espacio para agrupar alertas por criticidad, tipo de incidencia,
+              botiquín afectado o necesidad de intervención inmediata.
+            </p>
+          </div>
+
+          <div
+            id="alertas-priority-meta"
+            class="section-meta"
+            data-slot="priority-meta"
+            aria-live="polite"
+          >
+            <!-- Resumen contextual -->
+          </div>
+        </div>
+
+        <div
+          id="alertas-priority-slot"
+          class="view-content-stack"
+          data-slot="priority"
+        >
+          <!-- Bloque dinámico: agrupaciones, listas priorizadas, resúmenes -->
+        </div>
+      </section>
+    </main>
+
+    <!-- PANEL LATERAL -->
+    <aside
+      id="alertas-aside"
+      class="view-aside"
+      data-role="side-panel"
+      aria-labelledby="alertas-aside-title"
+    >
+      <!-- DETALLE DE ALERTA -->
+      <section class="view-section">
+        <div class="section-heading">
+          <h2 id="alertas-aside-title" class="section-title">
+            Detalle de la alerta
+          </h2>
+          <p class="section-description">
+            Aquí se muestra la información ampliada de la alerta seleccionada,
+            incluyendo origen, prioridad, estado, contexto y observaciones.
+          </p>
+        </div>
+
+        <div
+          id="alertas-aside-slot"
+          class="view-content-stack"
+          data-slot="aside"
+        >
+          <!-- Detail card / ficha principal -->
+        </div>
+      </section>
+
+      <!-- CONTEXTO / ORIGEN -->
+      <section
+        class="view-section"
+        aria-labelledby="alertas-origin-title"
+      >
+        <div class="section-heading">
+          <h2 id="alertas-origin-title" class="section-title">
+            Origen y contexto
+          </h2>
+          <p class="section-description">
+            Visualiza si la alerta proviene de vencimiento, bajo stock, faltante,
+            inspección atrasada, hallazgo pendiente u otra lógica del sistema.
+          </p>
+        </div>
+
+        <div
+          id="alertas-origin-slot"
+          class="view-content-stack"
+          data-slot="origin"
+        >
+          <!-- Contexto de origen / entidad relacionada -->
+        </div>
+      </section>
+
+      <!-- RECOMENDACIONES / ACCIONES -->
+      <section
+        class="view-section"
+        aria-labelledby="alertas-actions-title"
+      >
+        <div class="section-heading">
+          <h2 id="alertas-actions-title" class="section-title">
+            Recomendaciones y acciones
+          </h2>
+          <p class="section-description">
+            Accesos rápidos para gestionar la alerta, abrir el registro relacionado,
+            registrar seguimiento o ejecutar acciones correctivas.
+          </p>
+        </div>
+
+        <div
+          id="alertas-context-actions"
+          class="view-content-stack"
+          data-slot="context-actions"
+        >
+          <!-- Botones / checklist / acciones sugeridas -->
+        </div>
+      </section>
+
+      <!-- RELACIONES / IMPACTO -->
+      <section
+        class="view-section"
+        aria-labelledby="alertas-impact-title"
+      >
+        <div class="section-heading">
+          <h2 id="alertas-impact-title" class="section-title">
+            Impacto y relaciones
+          </h2>
+          <p class="section-description">
+            Muestra la relación con botiquines, ítems, inspecciones o reposiciones
+            vinculadas para facilitar una gestión más completa.
+          </p>
+        </div>
+
+        <div
+          id="alertas-impact-slot"
+          class="view-content-stack"
+          data-slot="impact"
+        >
+          <!-- Relaciones / entidades conectadas / impacto -->
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ESTADOS GLOBALES -->
+  <section
+    id="alertas-states"
+    class="view-states"
+    aria-live="polite"
+  >
+    <div
+      id="alertas-loading"
+      class="view-state view-state--loading"
+      hidden
+    >
+      Cargando información de alertas...
+    </div>
+
+    <div
+      id="alertas-empty"
+      class="view-state view-state--empty"
+      hidden
+    >
+      No hay alertas para mostrar con los filtros actuales.
+    </div>
+
+    <div
+      id="alertas-error"
+      class="view-state view-state--error"
+      hidden
+    >
+      Ocurrió un error al cargar la información de alertas.
+    </div>
+  </section>
+</section>

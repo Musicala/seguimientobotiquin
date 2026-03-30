@@ -1,0 +1,393 @@
+<section
+  id="dashboard-view"
+  class="view view--dashboard"
+  data-view="dashboard"
+  aria-labelledby="dashboard-title"
+>
+  <!-- HEADER PRINCIPAL -->
+  <header class="view-header" data-role="view-header">
+    <div class="view-header__main">
+      <p class="view-eyebrow">Resumen general</p>
+      <h1 id="dashboard-title" class="view-title">
+        Panel de Control de Botiquines
+      </h1>
+      <p class="view-description">
+        Monitorea el estado general de los botiquines, inventario, inspecciones,
+        reposiciones y alertas del sistema SG-SST desde una vista central de seguimiento.
+      </p>
+    </div>
+
+    <div
+      id="dashboard-header-actions"
+      class="view-header__actions"
+      data-slot="header-actions"
+      aria-label="Acciones principales del dashboard"
+    >
+      <!-- JS inyecta botones -->
+    </div>
+  </header>
+
+  <!-- TOOLBAR / FILTROS -->
+  <section
+    id="dashboard-toolbar-section"
+    class="view-toolbar-section"
+    aria-label="Filtros y herramientas del dashboard"
+  >
+    <div class="toolbar" data-role="toolbar">
+      <div class="toolbar__left">
+        <div
+          id="dashboard-filters"
+          class="view-toolbar"
+          data-slot="filters"
+        >
+          <!-- filtros por botiquín, estado, prioridad, periodo, etc -->
+        </div>
+      </div>
+
+      <div class="toolbar__right">
+        <div
+          id="dashboard-toolbar-actions"
+          data-slot="toolbar-actions"
+          aria-label="Acciones secundarias del dashboard"
+        >
+          <!-- exportar, recargar, cambiar agrupación -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN / KPIs -->
+  <section
+    id="dashboard-summary-section"
+    class="view-section"
+    aria-labelledby="dashboard-summary-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="dashboard-summary-title" class="section-title">
+          Resumen ejecutivo
+        </h2>
+        <p class="section-description">
+          Indicadores clave para revisar rápidamente disponibilidad, criticidad,
+          seguimiento pendiente y comportamiento operativo general del sistema.
+        </p>
+      </div>
+
+      <div
+        id="dashboard-summary-meta"
+        class="section-meta"
+        data-slot="summary-meta"
+        aria-live="polite"
+      >
+        <!-- última actualización / rango / contexto -->
+      </div>
+    </div>
+
+    <div
+      id="dashboard-kpis"
+      class="dashboard-kpis"
+      data-role="kpis"
+      data-slot="summary"
+      aria-label="Indicadores clave"
+      aria-live="polite"
+    >
+      <!-- Cards KPI renderizadas dinámicamente -->
+    </div>
+  </section>
+
+  <!-- GRID PRINCIPAL -->
+  <section
+    id="dashboard-grid-section"
+    class="view-section"
+    aria-labelledby="dashboard-grid-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="dashboard-grid-title" class="section-title">
+          Seguimiento general
+        </h2>
+        <p class="section-description">
+          Vista consolidada por módulos para identificar botiquines en riesgo,
+          hallazgos críticos, movimientos recientes y alertas prioritarias.
+        </p>
+      </div>
+
+      <div
+        id="dashboard-grid-meta"
+        class="section-meta"
+        data-slot="grid-meta"
+        aria-live="polite"
+      >
+        <!-- resumen de contexto / filtros activos -->
+      </div>
+    </div>
+
+    <div class="dashboard-grid" data-role="dashboard-grid">
+      <!-- ESTADO DE BOTIQUINES -->
+      <article
+        class="dashboard-card"
+        data-section="botiquines"
+        aria-labelledby="dashboard-botiquines-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-botiquines-title" class="dashboard-card__title">
+              Estado de botiquines
+            </h3>
+            <p class="dashboard-card__description">
+              Revisión rápida del estado general y nivel de cumplimiento por botiquín.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-botiquines-meta"
+            class="dashboard-card__meta"
+            data-slot="botiquines-meta"
+            aria-live="polite"
+          >
+            <!-- conteos o badges -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-botiquines-content"
+          class="dashboard-card__content"
+          data-role="botiquines-summary"
+        >
+          <!-- Lista / cards dinámicas -->
+        </div>
+      </article>
+
+      <!-- INVENTARIO CRÍTICO -->
+      <article
+        class="dashboard-card"
+        data-section="inventario"
+        aria-labelledby="dashboard-inventario-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-inventario-title" class="dashboard-card__title">
+              Inventario crítico
+            </h3>
+            <p class="dashboard-card__description">
+              Elementos con bajo stock, vencidos o próximos a vencer.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-inventario-meta"
+            class="dashboard-card__meta"
+            data-slot="inventario-meta"
+            aria-live="polite"
+          >
+            <!-- conteos o badges -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-inventario-content"
+          class="dashboard-card__content"
+          data-role="inventario-critico"
+        >
+          <!-- Lista dinámica -->
+        </div>
+      </article>
+
+      <!-- ALERTAS -->
+      <article
+        class="dashboard-card"
+        data-section="alertas"
+        aria-labelledby="dashboard-alertas-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-alertas-title" class="dashboard-card__title">
+              Alertas recientes
+            </h3>
+            <p class="dashboard-card__description">
+              Eventos que requieren atención inmediata o seguimiento cercano.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-alertas-meta"
+            class="dashboard-card__meta"
+            data-slot="alertas-meta"
+            aria-live="polite"
+          >
+            <!-- conteos o badges -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-alertas-content"
+          class="dashboard-card__content"
+          data-role="alertas-list"
+        >
+          <!-- Lista dinámica -->
+        </div>
+      </article>
+
+      <!-- INSPECCIONES -->
+      <article
+        class="dashboard-card"
+        data-section="inspecciones"
+        aria-labelledby="dashboard-inspecciones-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-inspecciones-title" class="dashboard-card__title">
+              Inspecciones
+            </h3>
+            <p class="dashboard-card__description">
+              Estado de ejecución, pendientes y seguimiento operativo reciente.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-inspecciones-meta"
+            class="dashboard-card__meta"
+            data-slot="inspecciones-meta"
+            aria-live="polite"
+          >
+            <!-- conteos o badges -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-inspecciones-content"
+          class="dashboard-card__content"
+          data-role="inspecciones-summary"
+        >
+          <!-- Lista dinámica -->
+        </div>
+      </article>
+
+      <!-- REPOSICIONES -->
+      <article
+        class="dashboard-card"
+        data-section="reposiciones"
+        aria-labelledby="dashboard-reposiciones-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-reposiciones-title" class="dashboard-card__title">
+              Reposiciones
+            </h3>
+            <p class="dashboard-card__description">
+              Movimientos recientes de abastecimiento y acciones pendientes.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-reposiciones-meta"
+            class="dashboard-card__meta"
+            data-slot="reposiciones-meta"
+            aria-live="polite"
+          >
+            <!-- conteos o badges -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-reposiciones-content"
+          class="dashboard-card__content"
+          data-role="reposiciones-summary"
+        >
+          <!-- Lista dinámica -->
+        </div>
+      </article>
+
+      <!-- ACTIVIDAD / SEGUIMIENTO -->
+      <article
+        class="dashboard-card dashboard-card--wide"
+        data-section="actividad"
+        aria-labelledby="dashboard-actividad-title"
+      >
+        <header class="dashboard-card__header">
+          <div class="dashboard-card__heading">
+            <h3 id="dashboard-actividad-title" class="dashboard-card__title">
+              Actividad reciente y seguimiento
+            </h3>
+            <p class="dashboard-card__description">
+              Espacio para renderizar movimientos recientes, pendientes o hitos operativos.
+            </p>
+          </div>
+
+          <div
+            id="dashboard-actividad-meta"
+            class="dashboard-card__meta"
+            data-slot="actividad-meta"
+            aria-live="polite"
+          >
+            <!-- última actualización / cantidad -->
+          </div>
+        </header>
+
+        <div
+          id="dashboard-actividad-content"
+          class="dashboard-card__content"
+          data-role="activity-feed"
+        >
+          <!-- timeline, lista o feed dinámico -->
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- FEEDBACK / ESTADOS LOCALES -->
+  <section
+    id="dashboard-feedback-section"
+    class="view-section"
+    aria-labelledby="dashboard-feedback-title"
+  >
+    <div class="section-heading">
+      <h2 id="dashboard-feedback-title" class="section-title">
+        Estado del panel
+      </h2>
+      <p class="section-description">
+        Mensajes de carga, vacíos operativos o errores generales del dashboard.
+      </p>
+    </div>
+
+    <div
+      id="dashboard-feedback-slot"
+      class="view-feedback"
+      data-slot="feedback"
+      aria-live="polite"
+    >
+      <!-- feedback dinámico -->
+    </div>
+  </section>
+
+  <!-- ESTADOS GLOBALES -->
+  <section
+    id="dashboard-states"
+    class="view-states"
+    aria-live="polite"
+  >
+    <div
+      id="dashboard-loading"
+      class="view-state view-state--loading"
+      hidden
+    >
+      Cargando información del dashboard...
+    </div>
+
+    <div
+      id="dashboard-empty"
+      class="view-state view-state--empty"
+      hidden
+    >
+      No hay información disponible para mostrar.
+    </div>
+
+    <div
+      id="dashboard-error"
+      class="view-state view-state--error"
+      hidden
+    >
+      Ocurrió un error al cargar el dashboard.
+    </div>
+  </section>
+</section>

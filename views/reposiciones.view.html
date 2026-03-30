@@ -1,0 +1,334 @@
+<section
+  id="reposiciones-view"
+  class="view view--reposiciones"
+  data-view="reposiciones"
+  aria-labelledby="reposiciones-title"
+>
+  <!-- HEADER PRINCIPAL -->
+  <header class="view-header" data-role="view-header">
+    <div class="view-header__main">
+      <p class="view-eyebrow">Abastecimiento y seguimiento</p>
+      <h1 id="reposiciones-title" class="view-title">Reposiciones</h1>
+      <p class="view-description">
+        Consulta, filtra y supervisa los movimientos de reposición asociados a los
+        botiquines, con trazabilidad sobre el ítem afectado, el origen operativo,
+        el responsable y la actualización del inventario.
+      </p>
+    </div>
+
+    <div
+      id="reposiciones-header-actions"
+      class="view-header__actions"
+      data-slot="header-actions"
+      aria-label="Acciones principales de reposiciones"
+    >
+      <!-- Botones rápidos renderizados por JS -->
+    </div>
+  </header>
+
+  <!-- TOOLBAR / FILTROS -->
+  <section
+    id="reposiciones-toolbar-section"
+    class="view-toolbar-section"
+    aria-label="Filtros y herramientas de reposiciones"
+  >
+    <div class="toolbar" data-role="toolbar">
+      <div class="toolbar__left">
+        <div
+          id="reposiciones-toolbar-slot"
+          class="view-toolbar"
+          data-role="toolbar-content"
+          data-slot="toolbar"
+        >
+          <!-- renderToolbar() / filtros / búsqueda -->
+        </div>
+      </div>
+
+      <div class="toolbar__right">
+        <div
+          id="reposiciones-toolbar-actions"
+          data-slot="toolbar-actions"
+          aria-label="Acciones secundarias de reposiciones"
+        >
+          <!-- Exportar / recargar / alternar vista -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN / KPIs -->
+  <section
+    id="reposiciones-summary-section"
+    class="view-section"
+    aria-labelledby="reposiciones-summary-title"
+  >
+    <div class="section-heading section-heading--split">
+      <div>
+        <h2 id="reposiciones-summary-title" class="section-title">
+          Resumen de reposiciones
+        </h2>
+        <p class="section-description">
+          Vista rápida del comportamiento general de abastecimiento, reposiciones
+          pendientes, movimientos recientes y registros vinculados a inspecciones.
+        </p>
+      </div>
+
+      <div
+        id="reposiciones-summary-meta"
+        class="section-meta"
+        data-slot="summary-meta"
+        aria-live="polite"
+      >
+        <!-- Última actualización / contexto resumido -->
+      </div>
+    </div>
+
+    <div
+      id="reposiciones-summary-slot"
+      class="dashboard-summary-grid"
+      data-slot="summary"
+      aria-live="polite"
+    >
+      <!-- KPIs / tarjetas resumen -->
+    </div>
+  </section>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="view-layout view-layout--with-aside">
+    <!-- COLUMNA PRINCIPAL -->
+    <main
+      id="reposiciones-main"
+      class="view-main"
+      data-role="main-content"
+      aria-label="Listado principal de reposiciones"
+    >
+      <!-- LISTADO -->
+      <section
+        id="reposiciones-list-section"
+        class="view-section"
+        aria-labelledby="reposiciones-list-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="reposiciones-list-title" class="section-title">
+              Registros de reposición
+            </h2>
+            <p class="section-description">
+              Revisa movimientos de reposición por fecha, ítem, botiquín,
+              responsable, motivo, origen y estado operativo.
+            </p>
+          </div>
+
+          <div
+            id="reposiciones-list-meta"
+            class="section-meta"
+            data-slot="list-meta"
+            aria-live="polite"
+          >
+            <!-- Conteo, filtros activos, última actualización -->
+          </div>
+        </div>
+
+        <div
+          id="reposiciones-feedback-slot"
+          class="view-feedback"
+          data-slot="feedback"
+          aria-live="polite"
+        >
+          <!-- Loading / empty / error -->
+        </div>
+
+        <div
+          id="reposiciones-active-filters"
+          class="active-filters"
+          data-slot="active-filters"
+          aria-live="polite"
+        >
+          <!-- Chips de filtros activos -->
+        </div>
+
+        <div
+          id="reposiciones-list-shell"
+          class="data-panel"
+          data-role="list-shell"
+        >
+          <div
+            id="reposiciones-list-slot"
+            class="view-content-stack"
+            data-slot="list"
+          >
+            <!-- Tabla, cards o listado dinámico -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TRAZABILIDAD / CONTEXTO OPERATIVO -->
+      <section
+        id="reposiciones-trace-section"
+        class="view-section"
+        aria-labelledby="reposiciones-trace-title"
+      >
+        <div class="section-heading section-heading--split">
+          <div>
+            <h2 id="reposiciones-trace-title" class="section-title">
+              Trazabilidad y seguimiento
+            </h2>
+            <p class="section-description">
+              Espacio para visualizar la relación entre reposiciones, inspecciones
+              de origen, actualizaciones de inventario y observaciones operativas.
+            </p>
+          </div>
+
+          <div
+            id="reposiciones-trace-meta"
+            class="section-meta"
+            data-slot="trace-meta"
+            aria-live="polite"
+          >
+            <!-- Resumen contextual -->
+          </div>
+        </div>
+
+        <div
+          id="reposiciones-trace-slot"
+          class="view-content-stack"
+          data-slot="trace"
+        >
+          <!-- Timeline, agrupaciones, relaciones, movimientos recientes -->
+        </div>
+      </section>
+    </main>
+
+    <!-- PANEL LATERAL -->
+    <aside
+      id="reposiciones-aside"
+      class="view-aside"
+      data-role="side-panel"
+      aria-labelledby="reposiciones-aside-title"
+    >
+      <!-- DETALLE PRINCIPAL -->
+      <section class="view-section">
+        <div class="section-heading">
+          <h2 id="reposiciones-aside-title" class="section-title">
+            Detalle de la reposición
+          </h2>
+          <p class="section-description">
+            Aquí se muestra la información ampliada del registro seleccionado,
+            incluyendo cantidades, fechas, responsable, lote, vencimiento y notas.
+          </p>
+        </div>
+
+        <div
+          id="reposiciones-aside-slot"
+          class="view-content-stack"
+          data-slot="aside"
+        >
+          <!-- Ficha de detalle principal -->
+        </div>
+      </section>
+
+      <!-- DETALLE DEL ÍTEM / IMPACTO -->
+      <section
+        class="view-section"
+        aria-labelledby="reposiciones-item-title"
+      >
+        <div class="section-heading">
+          <h2 id="reposiciones-item-title" class="section-title">
+            Ítem afectado e impacto
+          </h2>
+          <p class="section-description">
+            Visualiza el elemento asociado, el botiquín correspondiente y el
+            impacto de la reposición sobre el inventario disponible.
+          </p>
+        </div>
+
+        <div
+          id="reposiciones-item-slot"
+          class="view-content-stack"
+          data-slot="item-impact"
+        >
+          <!-- Resumen del ítem / antes vs después / contexto de inventario -->
+        </div>
+      </section>
+
+      <!-- ORIGEN / RELACIÓN CON INSPECCIONES -->
+      <section
+        class="view-section"
+        aria-labelledby="reposiciones-origin-title"
+      >
+        <div class="section-heading">
+          <h2 id="reposiciones-origin-title" class="section-title">
+            Origen y contexto
+          </h2>
+          <p class="section-description">
+            Muestra si la reposición proviene de una inspección, un hallazgo,
+            una alerta o una gestión manual de abastecimiento.
+          </p>
+        </div>
+
+        <div
+          id="reposiciones-origin-slot"
+          class="view-content-stack"
+          data-slot="origin"
+        >
+          <!-- id_inspeccion_origen / contexto / motivo / relación -->
+        </div>
+      </section>
+
+      <!-- ACCIONES CONTEXTUALES -->
+      <section
+        class="view-section"
+        aria-labelledby="reposiciones-actions-title"
+      >
+        <div class="section-heading">
+          <h2 id="reposiciones-actions-title" class="section-title">
+            Acciones relacionadas
+          </h2>
+          <p class="section-description">
+            Accesos rápidos para editar, completar seguimiento, revisar el ítem,
+            abrir contexto de inspección o registrar nuevas acciones relacionadas.
+          </p>
+        </div>
+
+        <div
+          id="reposiciones-context-actions"
+          class="view-content-stack"
+          data-slot="context-actions"
+        >
+          <!-- Botones / panel de acciones -->
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ESTADOS GLOBALES -->
+  <section
+    id="reposiciones-states"
+    class="view-states"
+    aria-live="polite"
+  >
+    <div
+      id="reposiciones-loading"
+      class="view-state view-state--loading"
+      hidden
+    >
+      Cargando información de reposiciones...
+    </div>
+
+    <div
+      id="reposiciones-empty"
+      class="view-state view-state--empty"
+      hidden
+    >
+      No hay reposiciones registradas para mostrar con los filtros actuales.
+    </div>
+
+    <div
+      id="reposiciones-error"
+      class="view-state view-state--error"
+      hidden
+    >
+      Ocurrió un error al cargar la información de reposiciones.
+    </div>
+  </section>
+</section>

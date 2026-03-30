@@ -1,0 +1,129 @@
+<section class="pedido-view">
+
+  <!-- HEADER -->
+  <header class="pedido-header">
+    <div>
+      <h1>Pedido consolidado</h1>
+      <p class="pedido-subtitle">
+        Lista automática de faltantes para solicitud a proveedor
+      </p>
+    </div>
+
+    <div class="pedido-actions">
+      <button id="pedido-refresh-btn" class="btn secondary">
+        🔄 Actualizar
+      </button>
+
+      <button id="pedido-copy-btn" class="btn">
+        📋 Copiar
+      </button>
+
+      <button id="pedido-print-btn" class="btn primary">
+        🖨 Imprimir
+      </button>
+    </div>
+  </header>
+
+  <!-- RESUMEN -->
+  <section class="pedido-summary" id="pedido-summary">
+    <div class="summary-card">
+      <span class="summary-label">Productos</span>
+      <span class="summary-value" id="summary-productos">0</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="summary-label">Unidades faltantes</span>
+      <span class="summary-value" id="summary-unidades">0</span>
+    </div>
+
+    <div class="summary-card">
+      <span class="summary-label">Botiquines afectados</span>
+      <span class="summary-value" id="summary-botiquines">0</span>
+    </div>
+  </section>
+
+  <!-- FILTROS -->
+  <section class="pedido-filters">
+
+    <div class="filter-group">
+      <input
+        type="text"
+        id="pedido-search"
+        placeholder="Buscar producto..."
+        class="input"
+      />
+    </div>
+
+    <div class="filter-group">
+      <select id="pedido-categoria" class="input">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+
+  </section>
+
+  <!-- TABLA -->
+  <section class="pedido-table-section">
+
+    <div class="table-wrapper">
+
+      <table class="pedido-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Unidad</th>
+            <th>Total faltante</th>
+            <th>Botiquines</th>
+          </tr>
+        </thead>
+
+        <tbody id="pedido-table-body">
+          <!-- Render dinámico -->
+        </tbody>
+
+      </table>
+
+      <!-- EMPTY STATE -->
+      <div id="pedido-empty" class="empty-state hidden">
+        <p>No hay faltantes 🎉</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- DETALLE / PRINT -->
+  <section class="pedido-print-section">
+
+    <h2>Vista para proveedor</h2>
+
+    <div id="pedido-print-meta" class="print-meta">
+      <!-- Fecha / info -->
+    </div>
+
+    <div class="print-table-wrapper">
+      <table class="pedido-table print">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+          </tr>
+        </thead>
+
+        <tbody id="pedido-print-body">
+          <!-- Render dinámico -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="print-notes">
+      <p>
+        * Esta lista corresponde a los elementos faltantes consolidados de los botiquines de Musicala.
+      </p>
+    </div>
+
+  </section>
+
+</section>
