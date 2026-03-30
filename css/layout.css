@@ -1,0 +1,853 @@
+/* =========================================
+   TOKENS DE LAYOUT
+========================================= */
+
+:root {
+  --layout-gap-xs: 0.5rem;
+  --layout-gap-sm: 0.75rem;
+  --layout-gap-md: 1rem;
+  --layout-gap-lg: 1.25rem;
+  --layout-gap-xl: 1.5rem;
+  --layout-gap-2xl: 2rem;
+
+  --content-max-narrow: 820px;
+  --content-max-medium: 1080px;
+  --content-max-wide: 1320px;
+
+  --aside-width-sm: 280px;
+  --aside-width-md: 320px;
+  --aside-width-lg: 360px;
+}
+
+/* =========================================
+   LAYOUT GENERAL DE CONTENIDO
+========================================= */
+
+.page-shell {
+  display: grid;
+  gap: var(--layout-gap-lg);
+  min-width: 0;
+  width: 100%;
+}
+
+.page-section {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+  width: 100%;
+}
+
+.page-section--xs {
+  gap: var(--layout-gap-xs);
+}
+
+.page-section--sm {
+  gap: var(--layout-gap-sm);
+}
+
+.page-section--lg {
+  gap: var(--layout-gap-xl);
+}
+
+.page-section--xl {
+  gap: var(--layout-gap-2xl);
+}
+
+.section-block {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.section-block + .section-block {
+  margin-top: 0.15rem;
+}
+
+/* =========================================
+   ENCABEZADOS DE VISTA
+========================================= */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.page-header__main {
+  min-width: 0;
+  flex: 1 1 560px;
+}
+
+.page-header__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.page-header__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.12;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.page-header__text {
+  margin: 0.65rem 0 0;
+  max-width: 760px;
+  color: var(--text-soft);
+  font-size: 0.94rem;
+  line-height: 1.68;
+}
+
+.page-header__side {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+}
+
+.page-header--compact .page-header__title {
+  font-size: 1.15rem;
+}
+
+.page-header--compact .page-header__text {
+  font-size: 0.89rem;
+  margin-top: 0.45rem;
+}
+
+.page-header--centered {
+  text-align: center;
+  justify-content: center;
+}
+
+.page-header--centered .page-header__main {
+  flex: 0 1 900px;
+}
+
+.page-header--centered .page-header__text {
+  margin-inline: auto;
+}
+
+/* =========================================
+   SUBHEADERS / TOOLBARS
+========================================= */
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem 1rem;
+  flex-wrap: wrap;
+}
+
+.section-header__main {
+  min-width: 0;
+  flex: 1 1 420px;
+}
+
+.section-header__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.section-header__text {
+  margin: 0.35rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.section-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.section-header--compact {
+  margin-bottom: -0.1rem;
+}
+
+/* =========================================
+   STACKS Y WRAPPERS
+========================================= */
+
+.stack-2xs {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.stack-xs {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.stack-sm {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.stack-md {
+  display: grid;
+  gap: 1rem;
+}
+
+.stack-lg {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.stack-xl {
+  display: grid;
+  gap: 2rem;
+}
+
+.inline-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.inline-cluster--start {
+  justify-content: flex-start;
+}
+
+.inline-cluster--center {
+  justify-content: center;
+}
+
+.inline-cluster--between {
+  justify-content: space-between;
+}
+
+.inline-cluster--end {
+  justify-content: flex-end;
+}
+
+.content-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.content-narrow {
+  width: min(100%, var(--content-max-narrow));
+}
+
+.content-medium {
+  width: min(100%, var(--content-max-medium));
+}
+
+.content-wide {
+  width: min(100%, var(--content-max-wide));
+}
+
+.content-centered {
+  margin-inline: auto;
+}
+
+/* =========================================
+   GRID BASE
+========================================= */
+
+.grid {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.grid--1 {
+  grid-template-columns: 1fr;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid--auto {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.grid--cards {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.grid--cards-sm {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.grid--stats {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.grid--tight {
+  gap: 0.75rem;
+}
+
+.grid--loose {
+  gap: 1.4rem;
+}
+
+.grid--xloose {
+  gap: 1.75rem;
+}
+
+.grid > * {
+  min-width: 0;
+}
+
+/* =========================================
+   LAYOUTS DE DOS COLUMNAS
+========================================= */
+
+.split-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(var(--aside-width-md), 0.8fr);
+  gap: var(--layout-gap-md);
+  align-items: start;
+  min-width: 0;
+}
+
+.split-layout--balanced {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.split-layout--aside {
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.75fr);
+}
+
+.split-layout--wide-aside {
+  grid-template-columns: minmax(0, 1.15fr) minmax(var(--aside-width-lg), 0.95fr);
+}
+
+.split-layout__main,
+.split-layout__aside {
+  min-width: 0;
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+/* =========================================
+   LAYOUTS DE TRES COLUMNAS
+========================================= */
+
+.tri-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.35fr) minmax(280px, 0.9fr);
+  gap: var(--layout-gap-md);
+  align-items: start;
+  min-width: 0;
+}
+
+.tri-layout__col {
+  min-width: 0;
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+.tri-layout--center-heavy {
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.6fr) minmax(260px, 0.82fr);
+}
+
+/* =========================================
+   PANELS / SIDEBLOCKS
+========================================= */
+
+.panel-group {
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+.aside-panel {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.sticky-panel {
+  position: sticky;
+  top: 1rem;
+}
+
+.info-panel {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.info-panel__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.info-panel__row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-panel__label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+.info-panel__value {
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.5;
+  max-width: 65%;
+}
+
+/* =========================================
+   LISTAS Y BLOQUES
+========================================= */
+
+.list-block {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.list-block--tight {
+  gap: 0.6rem;
+}
+
+.list-block--loose {
+  gap: 1rem;
+}
+
+.list-block--xl {
+  gap: 1.4rem;
+}
+
+.divider-block {
+  padding-top: 1rem;
+  border-top: 1px solid #edf1f7;
+}
+
+.divider-block:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+/* =========================================
+   WRAPPER PARA TABLAS / SCROLL
+========================================= */
+
+.scroll-area {
+  width: 100%;
+  overflow: auto;
+  min-width: 0;
+}
+
+.scroll-area--x {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scroll-area--y {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scroll-area--card {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.scroll-area--soft {
+  padding: 0.2rem;
+  background: #fcfdff;
+}
+
+/* =========================================
+   BLOQUES DE RESUMEN
+========================================= */
+
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+}
+
+.summary-block {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.summary-block__label {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.summary-block__value {
+  font-size: 1.18rem;
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.summary-block__meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* =========================================
+   MÓDULOS TIPO APP / DETAIL
+========================================= */
+
+.master-detail {
+  display: grid;
+  grid-template-columns: minmax(var(--aside-width-sm), 0.9fr) minmax(0, 1.4fr);
+  gap: var(--layout-gap-md);
+  align-items: start;
+  min-width: 0;
+}
+
+.master-detail__master,
+.master-detail__detail {
+  min-width: 0;
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+.master-detail--reversed {
+  grid-template-columns: minmax(0, 1.4fr) minmax(var(--aside-width-sm), 0.9fr);
+}
+
+/* =========================================
+   CONTENEDORES DE VISTA
+========================================= */
+
+.view-shell {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.view-shell__top {
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+.view-shell__body {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.view-shell__footer {
+  display: grid;
+  gap: var(--layout-gap-md);
+}
+
+.view-shell--spacious {
+  gap: var(--layout-gap-xl);
+}
+
+/* =========================================
+   BREADCRUMBS / META
+========================================= */
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem 0.9rem;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.meta-row strong {
+  color: var(--text);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.breadcrumbs__item {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumbs__item.is-current {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.breadcrumbs__sep {
+  opacity: 0.5;
+}
+
+/* =========================================
+   SHELL INTERNO DE MÓDULOS
+========================================= */
+
+.module-shell {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.module-shell__header {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.module-shell__content {
+  display: grid;
+  gap: var(--layout-gap-md);
+  min-width: 0;
+}
+
+.module-shell__footer {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.module-shell--spacious {
+  gap: var(--layout-gap-xl);
+}
+
+/* =========================================
+   BARRAS DE ACCIONES
+========================================= */
+
+.actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem 1rem;
+  flex-wrap: wrap;
+}
+
+.actions-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.actions-bar__group--end {
+  justify-content: flex-end;
+}
+
+.actions-bar__group--stretch {
+  flex: 1 1 auto;
+}
+
+/* =========================================
+   SECCIONES COLAPSABLES VISUALES
+========================================= */
+
+.fold-section {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.fold-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.fold-section__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.fold-section__body {
+  display: grid;
+  gap: 1rem;
+}
+
+/* =========================================
+   VACÍOS Y CENTRADO
+========================================= */
+
+.center-wrap {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+}
+
+.center-column {
+  width: min(100%, 720px);
+  margin-inline: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+/* =========================================
+   HELPERS DE ALINEACIÓN
+========================================= */
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+  .grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tri-layout,
+  .tri-layout--center-heavy,
+  .master-detail,
+  .master-detail--reversed {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 980px) {
+  .grid--3,
+  .grid--2,
+  .split-layout,
+  .split-layout--balanced,
+  .split-layout--aside,
+  .split-layout--wide-aside {
+    grid-template-columns: 1fr;
+  }
+
+  .sticky-panel {
+    position: static;
+    top: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell,
+  .page-section,
+  .section-block,
+  .view-shell,
+  .module-shell {
+    gap: 0.9rem;
+  }
+
+  .page-header,
+  .section-header,
+  .actions-bar,
+  .fold-section__header {
+    align-items: stretch;
+  }
+
+  .page-header__side,
+  .section-header__actions,
+  .actions-bar__group,
+  .actions-bar__group--end,
+  .actions-bar__group--stretch {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .page-header__side .btn,
+  .section-header__actions .btn,
+  .actions-bar__group .btn,
+  .actions-bar__group--end .btn,
+  .actions-bar__group--stretch .btn {
+    width: 100%;
+  }
+
+  .summary-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .info-panel__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-panel__value {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .content-narrow,
+  .content-medium,
+  .content-wide,
+  .center-column {
+    width: 100%;
+  }
+}
