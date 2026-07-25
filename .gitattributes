@@ -1,0 +1,7 @@
+# Normaliza los saltos de línea al guardar en el repositorio.
+# Sin esto, editar desde Windows marca archivos enteros como modificados
+# aunque no haya cambiado ni una letra.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary

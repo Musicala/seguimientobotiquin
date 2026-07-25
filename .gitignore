@@ -1,0 +1,12 @@
+# Respaldo local de la versión anterior.
+# No hace falta publicarlo: el código viejo está en el historial de git,
+# en el commit af264ae.
+.backup-v1/
+
+# Configuración local de herramientas
+.claude/
+
+# Sistema
+Thumbs.db
+.DS_Store
+desktop.ini
