@@ -146,6 +146,47 @@ export function aInputDate(valor) {
   return `${d.getFullYear()}-${mm}-${dd}`;
 }
 
+/** Fecha ISO mostrada de forma natural para Colombia: dd/mm/aaaa. */
+export function aFechaLatam(valor) {
+  const iso = aInputDate(valor);
+  if (!iso) return "";
+  const [anio, mes, dia] = iso.split("-");
+  return `${dia}/${mes}/${anio}`;
+}
+
+/**
+ * Convierte una fecha escrita como dd/mm/aaaa (o yyyy-mm-dd) a ISO.
+ * Devuelve "" si se dejó vacía y null si no representa una fecha real.
+ */
+export function normalizarFechaEntrada(valor) {
+  let texto = String(valor ?? "").trim();
+  if (!texto) return "";
+
+  // En celular el teclado numérico no siempre ofrece la barra. También
+  // aceptamos 25072026 y lo convertimos a 25/07/2026.
+  if (/^\d{8}$/.test(texto)) {
+    texto = `${texto.slice(0, 2)}/${texto.slice(2, 4)}/${texto.slice(4)}`;
+  }
+
+  const match = texto.match(/^(?:(\d{1,2})\/(\d{1,2})\/(\d{4})|(\d{4})-(\d{1,2})-(\d{1,2}))$/);
+  if (!match) return null;
+
+  const dia = Number(match[1] || match[6]);
+  const mes = Number(match[2] || match[5]);
+  const anio = Number(match[3] || match[4]);
+  const comprobacion = new Date(anio, mes - 1, dia);
+
+  if (
+    comprobacion.getFullYear() !== anio ||
+    comprobacion.getMonth() !== mes - 1 ||
+    comprobacion.getDate() !== dia
+  ) {
+    return null;
+  }
+
+  return `${anio}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+}
+
 /** Medianoche de hoy, para comparar días sin que la hora estorbe. */
 function hoy() {
   const d = new Date();

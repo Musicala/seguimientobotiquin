@@ -22,6 +22,7 @@
 ====================================================================== */
 
 import { $, $$, html, crudo, pintar, escapar } from "./dom.js";
+import { aFechaLatam, normalizarFechaEntrada } from "../core/model.js";
 
 let contenedor = null;
 let abiertos = 0;
@@ -179,8 +180,12 @@ function pintarCampo(campo) {
   } else if (tipo === "textarea") {
     control = `<textarea class="control" rows="${filas}" ${attrs}>${escapar(valor)}</textarea>`;
   } else {
-    const tipoInput = { numero: "number", fecha: "date", texto: "text" }[tipo] || tipo;
-    control = `<input type="${escapar(tipoInput)}" class="control" value="${escapar(valor)}" ${attrs} />`;
+    // Los selectores nativos de fecha cambian el orden de escritura según
+    // navegador/SO. Aquí siempre se muestra y captura dd/mm/aaaa.
+    const tipoInput = { numero: "number", fecha: "text", texto: "text" }[tipo] || tipo;
+    const fechaAttrs = tipo === "fecha" ? ' inputmode="numeric" placeholder="dd/mm/aaaa" autocomplete="off"' : "";
+    const valorVisible = tipo === "fecha" ? aFechaLatam(valor) : valor;
+    control = `<input type="${escapar(tipoInput)}" class="control" value="${escapar(valorVisible)}" ${attrs}${fechaAttrs} />`;
   }
 
   return html`
@@ -243,7 +248,14 @@ export function abrirFormulario({
   const btnEnviar = $("[data-enviar]", elemento);
   const errorGeneral = $("[data-error-general]", elemento);
 
-  const leer = () => Object.fromEntries(new FormData(form).entries());
+  const leer = () => {
+    const valores = Object.fromEntries(new FormData(form).entries());
+    campos.filter((campo) => campo.tipo === "fecha" && campo.nombre).forEach((campo) => {
+      const normalizada = normalizarFechaEntrada(valores[campo.nombre]);
+      if (normalizada !== null) valores[campo.nombre] = normalizada;
+    });
+    return valores;
+  };
 
   const limpiarErrores = () => {
     errorGeneral.hidden = true;
@@ -282,6 +294,10 @@ export function abrirFormulario({
         if (Number.isNaN(n)) errores[campo.nombre] = "Debe ser un número.";
         else if (campo.min !== undefined && n < campo.min) errores[campo.nombre] = `El mínimo es ${campo.min}.`;
         else if (campo.max !== undefined && n > campo.max) errores[campo.nombre] = `El máximo es ${campo.max}.`;
+      }
+
+      if (campo.tipo === "fecha" && valor !== "" && !normalizarFechaEntrada(valor)) {
+        errores[campo.nombre] = "Escribe una fecha válida como dd/mm/aaaa.";
       }
 
       if (campo.validar && !errores[campo.nombre]) {

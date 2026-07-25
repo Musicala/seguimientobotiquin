@@ -25,6 +25,8 @@ import {
   itemsDeBotiquin,
   itemPorId,
   aInputDate,
+  aFechaLatam,
+  normalizarFechaEntrada,
   faltanteParaMinimo
 } from "../core/model.js";
 
@@ -191,6 +193,7 @@ function fila(item) {
 
   const cantidad = pendiente?.cantidad ?? item.cantidad;
   const vence = pendiente?.vence ?? aInputDate(item.vence);
+  const venceVisible = aFechaLatam(vence);
   const cambiado = Boolean(pendiente);
 
   const falta = faltanteParaMinimo({ ...item, cantidad: Number(cantidad) || 0 });
@@ -225,10 +228,13 @@ function fila(item) {
         <label class="mini">
           <span class="mini__etiqueta">Vence</span>
           <input
-            type="date"
+            type="text"
             class="control control--mini"
-            value="${vence}"
+            value="${venceVisible}"
             data-campo="vence"
+            inputmode="numeric"
+            placeholder="dd/mm/aaaa"
+            autocomplete="off"
             aria-label="Fecha de vencimiento de ${item.nombre}"
           />
           ${
@@ -347,7 +353,13 @@ function conectarEventos() {
   // Los campos de la lista solo marcan el cambio como pendiente.
   // Nada viaja a Sheets hasta que se pulsa "Guardar cambios".
   on(contenedor, "change", "[data-campo]", (e, campo) => {
-    anotarCambio(campo.closest("[data-item]").dataset.item, campo.dataset.campo, campo.value);
+    const valor = campo.dataset.campo === "vence" ? normalizarFechaEntrada(campo.value) : campo.value;
+    if (valor === null) {
+      avisar.error("Escribe una fecha válida como dd/mm/aaaa.");
+      campo.focus();
+      return;
+    }
+    anotarCambio(campo.closest("[data-item]").dataset.item, campo.dataset.campo, valor);
   });
 
   // Enter salta al siguiente ítem: se cuenta más rápido con el teclado.
@@ -355,7 +367,12 @@ function conectarEventos() {
     if (e.key !== "Enter") return;
     e.preventDefault();
 
-    anotarCambio(campo.closest("[data-item]").dataset.item, campo.dataset.campo, campo.value);
+    const valor = campo.dataset.campo === "vence" ? normalizarFechaEntrada(campo.value) : campo.value;
+    if (valor === null) {
+      avisar.error("Escribe una fecha válida como dd/mm/aaaa.");
+      return;
+    }
+    anotarCambio(campo.closest("[data-item]").dataset.item, campo.dataset.campo, valor);
 
     const campos = $$(`[data-campo="${campo.dataset.campo}"]`, contenedor);
     const siguiente = campos[campos.indexOf(campo) + 1];

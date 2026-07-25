@@ -510,7 +510,7 @@ textarea.control {
   width: 90px;
 }
 
-.mini input[type="date"] {
+.mini input[data-campo="vence"] {
   width: 155px;
 }
 
@@ -940,7 +940,7 @@ textarea.control {
   }
 
   .mini input[type="number"],
-  .mini input[type="date"] {
+  .mini input[data-campo="vence"] {
     width: 100%;
   }
 
