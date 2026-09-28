@@ -28,7 +28,7 @@ export const APP = {
  * despliegue viejo y los cambios del Code.gs no se notan.
  */
 export const API_URL =
-  "https://script.google.com/macros/s/AKfycbwnnEWfmhJiPVtMJF7dZLhGaM55yyrZo2DZmksO9NsezTgs8f8MsERE3AjQFoB5HMPUWA/exec";
+  "https://script.google.com/macros/s/AKfycbyHrIHEP6IfVjjX-B5Hni6CJO8-zCSsEvUhN9TbIBgEWm8b-b3K8EQtTg-ruDkZwHeFEA/exec";
 
 export const TIMEOUT_MS = 20000;
 export const CACHE_TTL_MS = 45000;
