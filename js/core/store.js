@@ -136,6 +136,14 @@ export function guardarItem(id, cambios) {
   return conGuardado(() => api.guardarItem(id, cambios));
 }
 
+export function crearItem(datos) {
+  return conGuardado(() => api.crearItem(datos));
+}
+
+export function eliminarItem(id) {
+  return conGuardado(() => api.eliminarItem(id));
+}
+
 /**
  * Guarda todos los cambios pendientes de la revisión de una vez.
  * Si algún ítem falla, el resto sí se guarda y devolvemos el detalle

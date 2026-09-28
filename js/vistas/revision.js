@@ -171,6 +171,7 @@ function barraHerramientas(s) {
       <button type="button" class="btn btn--fantasma" data-recargar ${s.cargando ? crudo("disabled") : ""}>
         ${s.cargando ? "Actualizando..." : "Actualizar"}
       </button>
+      <button type="button" class="btn btn--fantasma" data-agregar>+ Agregar elemento</button>
       <button type="button" class="btn btn--primario" data-cerrar-revision>
         Registrar revisión
       </button>
@@ -248,6 +249,7 @@ function fila(item) {
       </div>
 
       <div class="item__acciones">
+        <button type="button" class="btn btn--chico btn--fantasma" data-editar aria-label="Editar ${item.nombre}">Editar</button>
         ${
           falta > 0
             ? html`<button type="button" class="btn btn--chico btn--primario" data-reponer>Reponer ${falta}</button>`
@@ -340,6 +342,10 @@ function conectarEventos() {
   on(contenedor, "click", "[data-guardar]", guardarPendientes);
   on(contenedor, "click", "[data-descartar]", descartarPendientes);
   on(contenedor, "click", "[data-cerrar-revision]", registrarRevision);
+  on(contenedor, "click", "[data-agregar]", abrirAlta);
+  on(contenedor, "click", "[data-editar]", (e, btn) => {
+    abrirEdicion(btn.closest("[data-item]").dataset.item);
+  });
   on(contenedor, "click", "[data-reponer]", (e, btn) => {
     abrirReposicion(btn.closest("[data-item]").dataset.item);
   });
@@ -475,6 +481,123 @@ async function descartarPendientes() {
 
   pendientes.clear();
   pintarVista();
+}
+
+/* ======================================
+   ALTA, EDICIÓN Y BAJA DE ELEMENTOS
+====================================== */
+
+function abrirAlta() {
+  const s = store.obtener();
+  const botiquines = s.botiquines.filter((b) => b.activo);
+
+  if (!botiquines.length) {
+    avisar.error("No hay botiquines activos en la hoja.");
+    return;
+  }
+
+  const catalogo = s.catalogo.filter((c) => c.activo);
+
+  abrirFormulario({
+    titulo: "Agregar elemento",
+    etiquetaEnviar: "Agregar",
+    campos: [
+      {
+        nombre: "id_botiquin",
+        etiqueta: "Botiquín",
+        tipo: "select",
+        valor: s.botiquinActivo || botiquines[0].id,
+        opciones: botiquines.map((b) => ({ valor: b.id, etiqueta: b.nombre })),
+        requerido: true,
+        ancho: 6
+      },
+      {
+        nombre: "id_elemento",
+        etiqueta: "Del catálogo",
+        tipo: "select",
+        valor: "",
+        opciones: [
+          { valor: "", etiqueta: "— Elemento nuevo —" },
+          ...catalogo.map((c) => ({ valor: c.id, etiqueta: c.nombre }))
+        ],
+        ayuda: "Opcional: rellena nombre, mínimo y unidad.",
+        ancho: 6
+      },
+      { nombre: "elemento", etiqueta: "Nombre", valor: "", requerido: true, ancho: 12 },
+      { nombre: "cantidad_actual", etiqueta: "Cantidad actual", tipo: "numero", valor: 0, min: 0, requerido: true, ancho: 4 },
+      { nombre: "cantidad_minima", etiqueta: "Mínimo", tipo: "numero", valor: 1, min: 0, requerido: true, ancho: 4 },
+      { nombre: "unidad", etiqueta: "Unidad", valor: "unidad", requerido: true, ancho: 4 },
+      { nombre: "fecha_vencimiento", etiqueta: "Vence", tipo: "fecha", valor: "", ayuda: "Opcional.", ancho: 6 }
+    ],
+    alAbrir: ({ formulario }) => {
+      formulario.elements.id_elemento.addEventListener("change", (e) => {
+        const c = catalogo.find((x) => x.id === e.target.value);
+        if (!c) return;
+        formulario.elements.elemento.value = c.nombre;
+        formulario.elements.cantidad_minima.value = c.cantidadRequerida;
+        if (c.unidad) formulario.elements.unidad.value = c.unidad;
+      });
+    },
+    alEnviar: async (valores) => {
+      await store.crearItem(valores);
+      avisar.exito(`${valores.elemento} agregado.`);
+    }
+  });
+}
+
+function abrirEdicion(itemId) {
+  const item = itemPorId(store.obtener().inventario, itemId);
+
+  if (!item) {
+    avisar.error("No encontré ese elemento.");
+    return;
+  }
+
+  const { elemento } = abrirFormulario({
+    titulo: "Editar elemento",
+    subtitulo: `${item.botiquinNombre} · ${item.id}`,
+    etiquetaEnviar: "Guardar",
+    campos: [
+      { nombre: "elemento", etiqueta: "Nombre", valor: item.nombre, requerido: true, ancho: 12 },
+      { nombre: "cantidad_actual", etiqueta: "Cantidad actual", tipo: "numero", valor: item.cantidad, min: 0, requerido: true, ancho: 4 },
+      { nombre: "cantidad_minima", etiqueta: "Mínimo", tipo: "numero", valor: item.minimo, min: 0, requerido: true, ancho: 4 },
+      { nombre: "unidad", etiqueta: "Unidad", valor: item.unidad, requerido: true, ancho: 4 },
+      { nombre: "fecha_vencimiento", etiqueta: "Vence", tipo: "fecha", valor: aInputDate(item.vence), ayuda: "Déjalo vacío si no vence.", ancho: 6 },
+      {
+        tipo: "nota",
+        ancho: 12,
+        contenido: html`<button type="button" class="btn btn--chico btn--peligro" data-eliminar-item>Eliminar este elemento</button>`
+      }
+    ],
+    alEnviar: async (valores) => {
+      await store.guardarItem(item.id, {
+        ...valores,
+        cantidad_actual: Number(valores.cantidad_actual),
+        cantidad_minima: Number(valores.cantidad_minima)
+      });
+      pendientes.delete(item.id);
+      avisar.exito(`${valores.elemento} actualizado.`);
+    }
+  });
+
+  $("[data-eliminar-item]", elemento).addEventListener("click", async () => {
+    const ok = await confirmar({
+      titulo: "¿Eliminar este elemento?",
+      mensaje: `${item.nombre} dejará de aparecer en ${item.botiquinNombre}. Su historial de reposiciones se conserva en la hoja.`,
+      etiquetaOk: "Eliminar",
+      peligro: true
+    });
+    if (!ok) return;
+
+    try {
+      await store.eliminarItem(item.id);
+      pendientes.delete(item.id);
+      $("[data-cerrar]", elemento)?.click();
+      avisar.exito(`${item.nombre} eliminado.`);
+    } catch (error) {
+      avisar.error(`No se pudo eliminar: ${error.message}`);
+    }
+  });
 }
 
 /* ======================================

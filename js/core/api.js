@@ -226,6 +226,22 @@ export function guardarItem(id, cambios = {}) {
   return escribir("updateInventarioItem", { id_item: id, ...cambios });
 }
 
+/** Agrega un elemento nuevo al inventario de un botiquín. */
+export function crearItem(datos = {}) {
+  return escribir("createInventarioItem", datos);
+}
+
+/** Da de baja un ítem (queda activo = No; la fila y su historial se conservan). */
+export function eliminarItem(id) {
+  if (!id) {
+    throw new ApiError("No se puede eliminar un ítem sin su id_item.", {
+      accion: "deleteInventarioItem"
+    });
+  }
+
+  return escribir("deleteInventarioItem", { id_item: id });
+}
+
 /** ¿El Web App desplegado no conoce esta acción todavía? */
 function esAccionNoSoportada(error) {
   return /unsupported action|acción no soportada/i.test(error?.message || "");

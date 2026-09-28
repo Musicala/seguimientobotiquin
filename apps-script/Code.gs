@@ -5,8 +5,9 @@
  * Contrato de acciones:
  *   GET   getBootstrap, getBotiquines, getCatalogo, getInventario,
  *         getInspecciones, getReposiciones, ping
- *   POST  updateInventarioItem, saveInspeccion, saveReposicion,
- *         deleteReposicion
+ *   POST  createInventarioItem, updateInventarioItem,
+ *         updateInventarioBatch, deleteInventarioItem, saveInspeccion,
+ *         saveReposicion, deleteReposicion
  *
  * Columnas reales de las hojas (no cambiar sin actualizar js/core/model.js):
  *   Botiquines    id_botiquin, nombre, tipo, ubicacion, responsable,
@@ -88,6 +89,10 @@ function route_(method, e) {
       case "getReposiciones":
         return jsonOk_(readSheet_(SHEET_NAMES.reposiciones));
 
+      case "createInventarioItem":
+        return jsonOk_(createInventarioItem_(payload));
+      case "deleteInventarioItem":
+        return jsonOk_(deleteInventarioItem_(payload));
       case "updateInventarioItem":
         return jsonOk_(updateInventarioItem_(payload));
       case "updateInventarioBatch":
@@ -226,6 +231,9 @@ function updateInventarioItem_(payload) {
       throw new Error('No existe el ítem "' + idItem + '" en la hoja Inventario.');
     }
 
+    if (payload.elemento !== undefined && normalizeString_(payload.elemento)) {
+      writeField_(sh, headers, rowIdx, "elemento", normalizeString_(payload.elemento));
+    }
     writeField_(sh, headers, rowIdx, "cantidad_actual", numberOrSkip_(payload.cantidad_actual));
     writeField_(sh, headers, rowIdx, "cantidad_minima", numberOrSkip_(payload.cantidad_minima));
     writeField_(sh, headers, rowIdx, "fecha_vencimiento", dateOrSkip_(payload.fecha_vencimiento));
@@ -329,6 +337,85 @@ function updateInventarioBatch_(payload) {
   } finally {
     lock.releaseLock();
   }
+}
+
+/* ======================================
+   ESCRITURA — ALTA Y BAJA DE ÍTEMS
+====================================== */
+
+/**
+ * Agrega un elemento al inventario de un botiquín.
+ *
+ * El id sigue el formato de la hoja: <id_botiquin>-ITM-001, con el
+ * consecutivo calculado sobre los ítems de ese botiquín (incluidos los
+ * dados de baja, para no reutilizar un id que aparece en Reposiciones).
+ */
+function createInventarioItem_(payload) {
+  var idBotiquin = normalizeString_(payload.id_botiquin);
+  var elemento = normalizeString_(payload.elemento);
+  if (!idBotiquin) throw new Error("Falta id_botiquin.");
+  if (!elemento) throw new Error("Falta el nombre del elemento.");
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+
+  try {
+    var sh = findSheetByNames_(SpreadsheetApp.getActive(), SHEET_NAMES.inventario);
+    if (!sh) throw new Error("No se encontró la hoja Inventario.");
+
+    var data = sh.getDataRange().getValues();
+    var headers = data[0].map(normalizeHeader_);
+    var idIdx = headers.indexOf("id_item");
+    if (idIdx < 0) throw new Error("La hoja Inventario no tiene columna id_item.");
+
+    var prefijo = idBotiquin + "-ITM-";
+    var max = 0;
+    for (var i = 1; i < data.length; i++) {
+      var id = normalizeString_(data[i][idIdx]);
+      if (id.indexOf(prefijo) !== 0) continue;
+      var n = parseInt(id.slice(prefijo.length), 10);
+      if (!isNaN(n)) max = Math.max(max, n);
+    }
+    var idItem = prefijo + padLeft_(max + 1, 3);
+
+    var valores = {
+      id_item: idItem,
+      id_botiquin: idBotiquin,
+      id_elemento: normalizeString_(payload.id_elemento),
+      elemento: elemento,
+      cantidad_actual: toNumber_(payload.cantidad_actual, 0),
+      cantidad_minima: toNumber_(payload.cantidad_minima, 0),
+      unidad: cleanUnidad_(payload.unidad) || "unidad",
+      fecha_vencimiento: dateOrSkip_(payload.fecha_vencimiento) || "",
+      fecha_ultima_reposicion: "",
+      activo: "Si"
+    };
+
+    var row = new Array(headers.length);
+    for (var c = 0; c < headers.length; c++) row[c] = "";
+    Object.keys(valores).forEach(function (campo) {
+      var col = findColumn_(headers, campo);
+      if (col >= 0) row[col] = valores[campo];
+    });
+
+    sh.appendRow(row);
+    clearReadCache_();
+
+    return { message: "Elemento agregado", id_item: idItem };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * Da de baja un ítem (activo = No). No se borra la fila: las
+ * reposiciones históricas apuntan a su id_item y el SGSST necesita
+ * esa trazabilidad para auditorías.
+ */
+function deleteInventarioItem_(payload) {
+  var idItem = normalizeString_(payload.id_item);
+  if (!idItem) throw new Error("Falta id_item.");
+  return updateInventarioItem_({ id_item: idItem, activo: false });
 }
 
 /* ======================================
@@ -611,6 +698,11 @@ function numberOrSkip_(value) {
 function dateOrSkip_(value) {
   if (value === undefined) return undefined;
   if (isBlankish_(value)) return "";
+
+  // "aaaa-mm-dd" se arma a mano: new Date() la leería como UTC y en
+  // Colombia (UTC-5) la fecha quedaría guardada un día antes.
+  var iso = String(value).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (iso) return new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
 
   var d = value instanceof Date ? value : new Date(value);
   if (isNaN(d.getTime())) return "";
