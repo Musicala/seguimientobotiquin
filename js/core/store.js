@@ -153,6 +153,10 @@ export function guardarItems(items) {
   return conGuardado(() => api.guardarItems(items));
 }
 
+export function marcarItemsRevisados(items, datos) {
+  return conGuardado(() => api.marcarItemsRevisados(items, datos));
+}
+
 export function guardarInspeccion(inspeccion) {
   return conGuardado(() => api.guardarInspeccion(inspeccion));
 }

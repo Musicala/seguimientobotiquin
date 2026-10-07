@@ -20,8 +20,9 @@ GitHub Pages  ──►  Apps Script (Web App)  ──►  Google Sheets
 
 **Revisión** — la pantalla de trabajo. Se elige un botiquín y se corrigen
 cantidades y fechas directamente en la lista, sin abrir ventanas. Los
-cambios se acumulan y se guardan todos juntos al final. Al terminar,
-"Registrar revisión" deja constancia en la hoja `Inspecciones`.
+cambios se acumulan y se guardan todos juntos al final. Cada elemento
+puede marcarse como revisado; "Registrar revisión" marca todo el
+botiquín y deja constancia en la hoja `Inspecciones`.
 
 **Pedido** — lo que falta para llegar a los mínimos, consolidado por
 elemento sumando todos los botiquines. Se puede copiar o imprimir.

@@ -6,7 +6,7 @@
  *   GET   getBootstrap, getBotiquines, getCatalogo, getInventario,
  *         getInspecciones, getReposiciones, ping
  *   POST  createInventarioItem, updateInventarioItem,
- *         updateInventarioBatch, deleteInventarioItem, saveInspeccion,
+ *         updateInventarioBatch, deleteInventarioItem, markItemsReviewed, saveInspeccion,
  *         saveReposicion, deleteReposicion
  *
  * Columnas reales de las hojas (no cambiar sin actualizar js/core/model.js):
@@ -19,6 +19,7 @@
  *   Inventario    id_item, id_botiquin, id_elemento, elemento,
  *                 cantidad_actual, cantidad_minima, unidad,
  *                 fecha_vencimiento, fecha_ultima_reposicion,
+ *                 fecha_ultima_revision, responsable_ultima_revision,
  *                 activo_(si/no)
  *   Inspecciones  id_inspeccion, id_botiquin, fecha, hora, responsable,
  *                 estado_general, observaciones_generales
@@ -50,7 +51,9 @@ var COLUMN_ALIASES = {
   cantidad_actual: ["cantidad_actual", "cantidad"],
   cantidad_minima: ["cantidad_minima", "stock_minimo", "cantidad_requerida"],
   fecha_vencimiento: ["fecha_vencimiento", "vencimiento"],
-  fecha_ultima_reposicion: ["fecha_ultima_reposicion", "ultima_reposicion"]
+  fecha_ultima_reposicion: ["fecha_ultima_reposicion", "ultima_reposicion"],
+  fecha_ultima_revision: ["fecha_ultima_revision", "ultima_revision"],
+  responsable_ultima_revision: ["responsable_ultima_revision", "responsable_revision"]
 };
 
 /* ======================================
@@ -97,6 +100,8 @@ function route_(method, e) {
         return jsonOk_(updateInventarioItem_(payload));
       case "updateInventarioBatch":
         return jsonOk_(updateInventarioBatch_(payload));
+      case "markItemsReviewed":
+        return jsonOk_(markItemsReviewed_(payload));
       case "saveInspeccion":
         return jsonOk_(saveInspeccion_(payload));
       case "saveReposicion":
@@ -334,6 +339,60 @@ function updateInventarioBatch_(payload) {
       actualizados: actualizados,
       errores: errores
     };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/** Marca la revisión de varios elementos sin cambiar stock ni vencimientos. */
+function markItemsReviewed_(payload) {
+  var items = payload && payload.items;
+  var fechaRevision = normalizeString_(payload && payload.fecha);
+  var responsable = normalizeString_(payload && payload.responsable);
+  if (!items || !items.length) throw new Error("No se enviaron elementos para revisar.");
+  if (!fechaRevision) throw new Error("Falta la fecha de revisión.");
+  if (!responsable) throw new Error("Falta el responsable de la revisión.");
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+
+  try {
+    var sh = findSheetByNames_(SpreadsheetApp.getActive(), SHEET_NAMES.inventario);
+    if (!sh) throw new Error("No se encontró la hoja Inventario.");
+
+    var data = sh.getDataRange().getValues();
+    var headers = data[0].map(normalizeHeader_);
+    var idIdx = headers.indexOf("id_item");
+    if (idIdx < 0) throw new Error("La hoja Inventario no tiene columna id_item.");
+    var fechaIdx = findColumn_(headers, "fecha_ultima_revision");
+    var responsableIdx = findColumn_(headers, "responsable_ultima_revision");
+    if (fechaIdx < 0 || responsableIdx < 0) {
+      throw new Error("Agrega a Inventario las columnas fecha_ultima_revision y responsable_ultima_revision para registrar la revisión por elemento.");
+    }
+
+    var filaPorId = {};
+    for (var i = 1; i < data.length; i++) {
+      var id = normalizeString_(data[i][idIdx]);
+      if (id) filaPorId[id] = i + 1;
+    }
+
+    var actualizados = [];
+    var errores = [];
+    var fechaGuardada = dateOrSkip_(fechaRevision) || fechaRevision;
+    items.forEach(function (item) {
+      var itemId = normalizeString_(item && item.id_item);
+      var rowIdx = filaPorId[itemId];
+      if (!itemId || !rowIdx) {
+        errores.push({ id_item: itemId, error: "No existe en la hoja Inventario." });
+        return;
+      }
+      sh.getRange(rowIdx, fechaIdx + 1).setValue(fechaGuardada);
+      sh.getRange(rowIdx, responsableIdx + 1).setValue(responsable);
+      actualizados.push(itemId);
+    });
+
+    clearReadCache_();
+    return { message: actualizados.length + " elemento(s) revisado(s)", actualizados: actualizados, errores: errores };
   } finally {
     lock.releaseLock();
   }

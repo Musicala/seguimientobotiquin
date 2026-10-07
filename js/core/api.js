@@ -289,6 +289,11 @@ export async function guardarItems(items = []) {
   }
 }
 
+export function marcarItemsRevisados(items = [], { fecha, responsable } = {}) {
+  if (!items.length) return Promise.resolve({ actualizados: [], errores: [] });
+  return escribir("markItemsReviewed", { items, fecha, responsable });
+}
+
 export function guardarInspeccion(inspeccion) {
   return escribir("saveInspeccion", inspeccion);
 }

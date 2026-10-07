@@ -482,6 +482,12 @@ textarea.control {
   color: var(--texto-tenue);
 }
 
+.item__revision {
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--texto-tenue);
+}
+
 .item__campos {
   display: flex;
   gap: 0.75rem;

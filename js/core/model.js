@@ -21,6 +21,7 @@
    Inventario   id_item, id_botiquin, id_elemento, elemento,
                 cantidad_actual, cantidad_minima, unidad,
                 fecha_vencimiento, fecha_ultima_reposicion,
+                fecha_ultima_revision, responsable_ultima_revision,
                 activo_(si/no)
    Inspecciones (vacía por ahora)
    Reposiciones id_reposicion, fecha, id_botiquin, id_item,
@@ -344,6 +345,8 @@ export function normalizarInventario(
         vence,
         diasParaVencer: diasHasta(vence),
         ultimaReposicion: fecha(fila?.fecha_ultima_reposicion),
+        ultimaRevision: fecha(fila?.fecha_ultima_revision),
+        responsableUltimaRevision: texto(fila?.responsable_ultima_revision),
         // La hoja llama a esta columna `activo_(si/no)`, no `activo`.
         activo: booleano(fila?.["activo_(si/no)"] ?? fila?.activo, true),
         tieneVencimiento: entradaCatalogo?.tieneVencimiento ?? Boolean(vence),

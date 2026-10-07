@@ -191,11 +191,13 @@ function lista(items) {
 function fila(item) {
   const meta = metaEstado(item.estado);
   const pendiente = pendientes.get(item.id);
+  const marcadaHoy = item.ultimaRevision && aInputDate(item.ultimaRevision) === hoyISO();
 
   const cantidad = pendiente?.cantidad ?? item.cantidad;
   const vence = pendiente?.vence ?? aInputDate(item.vence);
   const venceVisible = aFechaLatam(vence);
   const cambiado = Boolean(pendiente);
+  const ultimaRevision = item.ultimaRevision ? aFechaLatam(item.ultimaRevision) : "Sin revisar";
 
   const falta = faltanteParaMinimo({ ...item, cantidad: Number(cantidad) || 0 });
 
@@ -209,6 +211,9 @@ function fila(item) {
         <h3 class="item__nombre">${item.nombre}</h3>
         <p class="item__meta">
           ${item.botiquinNombre}${item.categoria ? ` · ${item.categoria}` : ""} · mínimo ${item.minimo} ${item.unidad}
+        </p>
+        <p class="item__revision" data-revision-estado="${item.id}">
+          ${item.ultimaRevision ? `Revisado ${ultimaRevision}${item.responsableUltimaRevision ? ` · ${item.responsableUltimaRevision}` : ""}` : ultimaRevision}
         </p>
       </div>
 
@@ -249,6 +254,7 @@ function fila(item) {
       </div>
 
       <div class="item__acciones">
+        <button type="button" class="btn btn--chico btn--fantasma" data-revisar-item aria-label="Marcar ${item.nombre} como revisado" ${marcadaHoy ? crudo("disabled") : ""}>${marcadaHoy ? "Revisado hoy ✓" : "Revisado hoy"}</button>
         <button type="button" class="btn btn--chico btn--fantasma" data-editar aria-label="Editar ${item.nombre}">Editar</button>
         ${
           falta > 0
@@ -342,6 +348,7 @@ function conectarEventos() {
   on(contenedor, "click", "[data-guardar]", guardarPendientes);
   on(contenedor, "click", "[data-descartar]", descartarPendientes);
   on(contenedor, "click", "[data-cerrar-revision]", registrarRevision);
+  on(contenedor, "click", "[data-revisar-item]", (e, btn) => registrarRevisionItems([btn.closest("[data-item]").dataset.item]));
   on(contenedor, "click", "[data-agregar]", abrirAlta);
   on(contenedor, "click", "[data-editar]", (e, btn) => {
     abrirEdicion(btn.closest("[data-item]").dataset.item);
@@ -693,64 +700,68 @@ function registrarRevision() {
     return;
   }
 
-  const botiquin = s.botiquines.find((b) => b.id === s.botiquinActivo);
   const items = itemsDeBotiquin(s.inventario, s.botiquinActivo).filter((i) => i.activo);
-  const conProblema = items.filter((i) => i.estado !== ESTADO.OK);
 
   if (pendientes.size > 0) {
     avisar.info("Guarda primero los cambios pendientes para que la revisión quede completa.");
     return;
   }
 
+  registrarRevisionItems(items.map((item) => item.id), { botiquinId: s.botiquinActivo, inspeccion: true });
+}
+
+function registrarRevisionItems(itemIds, { botiquinId = "", inspeccion = false } = {}) {
+  const s = store.obtener();
+  const items = itemIds.map((id) => itemPorId(s.inventario, id)).filter((item) => item?.activo);
+  if (!items.length) {
+    avisar.info("No hay elementos para marcar como revisados.");
+    return;
+  }
+
+  const conProblema = items.filter((item) => item.estado !== ESTADO.OK);
   const estadoSugerido = conProblema.length === 0 ? "OK" : conProblema.length > 5 ? "Crítico" : "Con novedades";
+  const tituloFormulario = inspeccion
+    ? "Registrar revisión"
+    : items.length === 1
+      ? "Marcar elemento revisado"
+      : "Marcar elementos revisados";
 
   abrirFormulario({
-    titulo: "Registrar revisión",
-    subtitulo: botiquin?.nombre || "",
-    etiquetaEnviar: "Registrar revisión",
+    titulo: tituloFormulario,
+    subtitulo: s.botiquines.find((b) => b.id === (botiquinId || items[0].botiquinId))?.nombre || "",
+    etiquetaEnviar: inspeccion ? "Registrar revisión" : "Guardar revisión",
     campos: [
       {
         tipo: "nota",
         ancho: 12,
         contenido: html`
-          Revisaste <strong>${items.length}</strong> elementos.
-          ${
-            conProblema.length
-              ? html`<strong>${conProblema.length}</strong> requieren atención.`
-              : "Todos están al día."
-          }
+          Revisarás <strong>${items.length}</strong> elementos. La fecha y el responsable quedarán en cada elemento.
+          ${conProblema.length ? html`<strong>${conProblema.length}</strong> requieren atención.` : "Todos siguen igual y están bien."}
         `
       },
       { nombre: "fecha", etiqueta: "Fecha", tipo: "fecha", valor: hoyISO(), requerido: true, ancho: 6 },
       { nombre: "responsable", etiqueta: "Responsable", valor: "", requerido: true, ancho: 6 },
-      {
-        nombre: "estado_general",
-        etiqueta: "Estado general",
-        tipo: "select",
-        valor: estadoSugerido,
-        opciones: ["OK", "Con novedades", "Crítico"],
-        ancho: 6
-      },
-      {
+      ...(inspeccion ? [{
         nombre: "hora",
         etiqueta: "Hora",
         valor: new Date().toTimeString().slice(0, 5),
         ancho: 6
-      },
-      {
-        nombre: "observaciones_generales",
-        etiqueta: "Observaciones",
-        tipo: "textarea",
-        valor: conProblema.length
-          ? `Pendientes: ${conProblema.map((i) => i.nombre).join(", ")}.`
-          : "",
-        ancho: 12,
-        filas: 3
-      }
+      }] : []),
+      ...(inspeccion ? [{ nombre: "estado_general", etiqueta: "Estado general", tipo: "select", valor: estadoSugerido, opciones: ["OK", "Con novedades", "Crítico"], ancho: 6 }] : [])
     ],
     alEnviar: async (valores) => {
-      await store.guardarInspeccion({ id_botiquin: s.botiquinActivo, ...valores });
-      avisar.exito("Revisión registrada en la hoja de inspecciones.");
+      const resultado = await store.marcarItemsRevisados(items.map((item) => ({ id_item: item.id })), valores);
+      const errores = resultado?.errores || [];
+      if (errores.length) throw new Error(`Se marcaron ${resultado.actualizados.length} elementos, pero ${errores.length} fallaron: ${errores.map((error) => error.id_item).join(", ")}`);
+      if (inspeccion) await store.guardarInspeccion({
+        id_botiquin: botiquinId,
+        ...valores,
+        estado_general: conProblema.length ? "Con novedades" : "OK",
+        observaciones_generales: conProblema.length
+          ? `Pendientes: ${conProblema.map((item) => item.nombre).join(", ")}.`
+          : "Revisión completa: todos los elementos siguen igual y están bien."
+      });
+      avisar.exito(`${resultado.actualizados.length} ${resultado.actualizados.length === 1 ? "elemento marcado" : "elementos marcados"} como revisados${inspeccion ? " y revisión registrada" : ""}.`);
     }
   });
 }

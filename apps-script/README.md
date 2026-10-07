@@ -50,6 +50,7 @@ cuando no está, así que nada se rompe mientras tanto.
 | `ping` | GET | Comprobar conexión |
 | `updateInventarioItem` | POST | Actualiza un ítem por `id_item` |
 | `updateInventarioBatch` | POST | Actualiza varios ítems en una llamada |
+| `markItemsReviewed` | POST | Guarda fecha y responsable de revisión en varios ítems sin tocar el inventario |
 | `saveInspeccion` | POST | Registra una revisión |
 | `saveReposicion` | POST | Registra reposición **y suma el stock** |
 | `deleteReposicion` | POST | Borra una fila del historial |
@@ -62,7 +63,9 @@ inválida en lugar de asignarle uno: un ID inventado hace que las
 ediciones se escriban en la fila equivocada o se pierdan en silencio.
 
 **Los nombres de columna importan.** Si renombras una columna en Sheets,
-hay que actualizar `js/core/model.js`. Casos ya contemplados:
+hay que actualizar `js/core/model.js`. Agrega a `Inventario` los encabezados
+exactos `fecha_ultima_revision` y `responsable_ultima_revision` para registrar
+la marca por elemento. Casos ya contemplados:
 
 - `activo_(si/no)` — se acepta también `activo`.
 - `unidad` — si trae un número, se usa la del catálogo vía `id_elemento`.
