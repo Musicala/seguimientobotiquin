@@ -53,9 +53,40 @@ export function pintarVista() {
         </button>
       </div>
 
-      ${pestana === "reposiciones" ? tablaReposiciones(s) : tablaRevisiones(s)}
+      ${pestana === "reposiciones" ? tablaReposiciones(s) : html`${tablaRevisiones(s)}${tablaRevisionesItems(s)}`}
     `
   );
+}
+
+function tablaRevisionesItems(s) {
+  const revisiones = s.inventario
+    .filter((item) => item.activo && item.ultimaRevision)
+    .sort((a, b) => b.ultimaRevision - a.ultimaRevision || a.nombre.localeCompare(b.nombre, "es"));
+
+  if (!revisiones.length) return "";
+
+  return html`
+    <section class="historial-items-revisados" aria-labelledby="tituloItemsRevisados">
+      <h2 id="tituloItemsRevisados">Última revisión por elemento</h2>
+      <p class="tabla__tenue">Cada fila muestra la última fecha guardada para ese elemento.</p>
+      <table class="tabla">
+        <thead>
+          <tr><th>Fecha</th><th>Botiquín</th><th>Elemento</th><th>Responsable</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          ${revisiones.map((item) => html`
+            <tr>
+              <td>${fmtFecha(item.ultimaRevision)}</td>
+              <td>${item.botiquinNombre}</td>
+              <td>${item.nombre}</td>
+              <td>${item.responsableUltimaRevision || "—"}</td>
+              <td>${item.estado === "ok" ? "Sin novedades" : "Con novedad"}</td>
+            </tr>
+          `)}
+        </tbody>
+      </table>
+    </section>
+  `;
 }
 
 function tablaReposiciones(s) {

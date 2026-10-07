@@ -212,8 +212,8 @@ function fila(item) {
         <p class="item__meta">
           ${item.botiquinNombre}${item.categoria ? ` · ${item.categoria}` : ""} · mínimo ${item.minimo} ${item.unidad}
         </p>
-        <p class="item__revision" data-revision-estado="${item.id}">
-          ${item.ultimaRevision ? `Revisado ${ultimaRevision}${item.responsableUltimaRevision ? ` · ${item.responsableUltimaRevision}` : ""}` : ultimaRevision}
+        <p class="item__revision ${item.ultimaRevision ? "item__revision--marcada" : ""}" data-revision-estado="${item.id}">
+          ${item.ultimaRevision ? `✓ Revisado ${ultimaRevision}${marcadaHoy ? " · hoy" : ""}${item.responsableUltimaRevision ? ` · ${item.responsableUltimaRevision}` : ""}` : ultimaRevision}
         </p>
       </div>
 
